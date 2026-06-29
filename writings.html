@@ -1,0 +1,812 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>创作集</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@400;700;900&family=Oswald:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --green: #1a9e3f;
+        --green-dark: #0f7a2e;
+        --green-light: #d4f5dc;
+        --yellow: #f5e642;
+        --crimson: #d72660;
+        --crimson-dark: #a81d4a;
+        --cream: #fffbe8;
+        --ink: #1a1a1a;
+        --serif: "Noto Serif SC", serif;
+        --sans: "Noto Sans SC", sans-serif;
+        --display: "Oswald", sans-serif;
+      }
+
+      body {
+        font-family: var(--sans);
+        background: var(--green);
+        color: var(--ink);
+        margin: 0;
+      }
+
+      /* SCROLL POP */
+      .pop {
+        opacity: 0;
+        transform: scale(0.7);
+        transition: none;
+      }
+      .pop.visible {
+        opacity: 1;
+        transform: scale(1);
+        transition:
+          opacity 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+          transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .pop-group .pop.visible:nth-child(1) {
+        transition-delay: 0s;
+      }
+      .pop-group .pop.visible:nth-child(2) {
+        transition-delay: 0.08s;
+      }
+      .pop-group .pop.visible:nth-child(3) {
+        transition-delay: 0.16s;
+      }
+
+      /* NAV */
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+        background: var(--green-dark);
+        border-bottom: 3px solid #000;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .nav-logo {
+        font-family: var(--serif);
+        font-weight: 900;
+        font-size: 20px;
+        color: var(--yellow);
+        text-shadow: 2px 2px 0 #000;
+        letter-spacing: 0.05em;
+        text-decoration: none;
+      }
+      .nav-logo a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .nav-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0.5rem 1rem;
+        background: var(--cream);
+        border: 2px solid #000;
+        border-radius: 999px;
+        font-family: var(--sans);
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--ink);
+        text-decoration: none;
+        transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+        letter-spacing: 0.05em;
+      }
+      .nav-back:hover {
+        transform: translateY(-2px);
+        background: var(--yellow);
+      }
+
+      /* HERO SUBPAGE */
+      .sub-hero {
+        padding: 2.5rem 2rem 1.5rem;
+        text-align: center;
+      }
+      .sub-hero h1 {
+        font-family: var(--serif);
+        font-weight: 900;
+        font-size: clamp(36px, 8vw, 64px);
+        color: var(--yellow);
+        text-shadow: 3px 3px 0 #000;
+        line-height: 1.1;
+        margin-bottom: 0.5rem;
+        letter-spacing: 0.04em;
+      }
+      .sub-hero p {
+        font-family: var(--sans);
+        font-size: 14px;
+        font-weight: 700;
+        color: #fff;
+        text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
+        letter-spacing: 0.06em;
+      }
+
+      /* SECTION */
+      .section {
+        padding: 1.5rem 2rem 4rem;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 1.5rem;
+      }
+      .section-title {
+        font-family: var(--serif);
+        font-weight: 900;
+        font-size: 26px;
+        color: var(--yellow);
+        text-shadow: 2px 2px 0 #000;
+        letter-spacing: 0.06em;
+      }
+      .sec-icon {
+        background: var(--crimson);
+        color: #fff;
+        border: 2px solid #000;
+        border-radius: 8px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        box-shadow: 2px 2px 0 #000;
+        flex-shrink: 0;
+      }
+
+      /* WRITING CARDS - IMAGE / NUMBER / TEXT LAYOUT */
+      .writings-section {
+        position: relative;
+      }
+      .writings-section .section-header {
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .writings-list {
+        display: flex;
+        flex-direction: column;
+        gap: 120px;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      /* Split layout: image + number separated from text box */
+      .writing-item {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        position: relative;
+      }
+
+      .writing-item .writing-visual-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        min-height: 280px;
+        border-bottom: none;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .writing-item .writing-cover {
+        background: var(--cream);
+        border: 3px solid #000;
+        border-radius: 24px;
+        overflow: hidden;
+        min-height: 280px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        opacity: 0;
+        transform: translateX(-80px);
+        transition:
+          opacity 0.9s cubic-bezier(0.34, 1.56, 0.64, 1),
+          transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .writing-item.writing-item--number-left .writing-cover {
+        transform: translateX(80px);
+      }
+
+      .writing-item .writing-cover.in-view {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .writing-item .writing-cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        will-change: transform;
+      }
+
+      .writing-item .writing-cover:hover img {
+        transform: scale(1.08);
+      }
+
+      .writing-cover-link {
+        display: flex;
+        text-decoration: none;
+        color: inherit;
+        border-radius: 24px;
+      }
+
+      .writing-item .writing-number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--display);
+        font-size: clamp(160px, 22vw, 300px);
+        font-weight: 700;
+        line-height: 0.82;
+        color: var(--yellow);
+        letter-spacing: -0.04em;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        text-shadow: none;
+        opacity: 0;
+        transform: translateX(80px);
+        transition:
+          opacity 0.9s cubic-bezier(0.34, 1.56, 0.64, 1),
+          transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .writing-item.writing-item--number-left .writing-number {
+        transform: translateX(-80px);
+      }
+
+      .writing-item .writing-number.in-view {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .writing-item .writing-info {
+        background: var(--cream);
+        border: 3px solid #000;
+        border-radius: 24px;
+        box-shadow: 6px 6px 0 #000;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        opacity: 0;
+        transform: translateY(60px);
+        transition:
+          opacity 0.9s cubic-bezier(0.34, 1.56, 0.64, 1),
+          transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .writing-item .writing-info.in-view {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .writing-item .writing-info:hover {
+        box-shadow: 10px 12px 0 #000;
+      }
+
+      .writing-info {
+        grid-area: info;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        position: relative;
+        z-index: 1;
+      }
+
+      .writing-title {
+        font-family: var(--serif);
+        font-weight: 900;
+        font-size: 26px;
+        color: var(--ink);
+        margin-bottom: 12px;
+        letter-spacing: 0.04em;
+        line-height: 1.25;
+      }
+
+      .writing-desc {
+        font-family: var(--sans);
+        font-size: 14px;
+        color: #555;
+        line-height: 1.85;
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-y: auto;
+      }
+
+      .writing-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 1.25rem;
+      }
+
+      .writing-tags {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .writing-tag {
+        padding: 5px 12px;
+        background: var(--yellow);
+        border: 2px solid #000;
+        border-radius: 100px;
+        font-family: var(--sans);
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--ink);
+        letter-spacing: 0.03em;
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow: 2px 2px 0 #000;
+        cursor: default;
+      }
+
+      .writing-tag:hover {
+        transform: translateY(-3px);
+        box-shadow: 3px 5px 0 #000;
+      }
+
+      .writing-read {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        background: var(--green);
+        color: #fff;
+        border: 2px solid #000;
+        border-radius: 100px;
+        box-shadow: 2px 2px 0 #000;
+        font-family: var(--sans);
+        font-size: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        letter-spacing: 0.04em;
+        transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        white-space: nowrap;
+      }
+
+      .writing-read:hover {
+        transform: translate(2px, 2px) scale(1.05);
+        box-shadow: 0 0 0 #000;
+        background: var(--crimson);
+      }
+
+      /* SCROLL REVEAL */
+      .reveal {
+        opacity: 0;
+        transition: opacity 0.9s cubic-bezier(0.34, 1.56, 0.64, 1),
+          transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .reveal.from-left {
+        transform: translateX(-80px) scale(0.92) rotate(-1deg);
+      }
+
+      .reveal.from-right {
+        transform: translateX(80px) scale(0.92) rotate(1deg);
+      }
+
+      .reveal.from-bottom {
+        transform: translateY(80px) scale(0.92);
+      }
+
+      .reveal.visible {
+        opacity: 1;
+        transform: translateX(0) translateY(0) scale(1) rotate(0deg);
+      }
+
+      .reveal.delay-1 {
+        transition-delay: 0.12s;
+      }
+
+      .reveal.delay-2 {
+        transition-delay: 0.24s;
+      }
+
+      /* FLOATING DECORATIONS */
+      .deco-blob {
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.18;
+        filter: blur(2px);
+        animation: blobFloat 8s ease-in-out infinite;
+      }
+
+      .deco-blob-1 {
+        width: 160px;
+        height: 160px;
+        background: var(--yellow);
+        top: -40px;
+        right: 5%;
+        animation-delay: 0s;
+      }
+
+      @keyframes blobFloat {
+        0%,
+        100% {
+          transform: translateY(0) rotate(0deg) scale(1);
+        }
+        50% {
+          transform: translateY(-30px) rotate(12deg) scale(1.08);
+        }
+      }
+
+      @media (max-width: 720px) {
+        .writings-list {
+          gap: 80px;
+        }
+        .writing-item .writing-visual-row {
+          grid-template-columns: 1fr;
+          grid-template-rows: 1fr auto;
+          gap: 16px;
+          min-height: auto;
+        }
+        .writing-item .writing-cover {
+          min-height: 220px;
+          border-bottom: none;
+        }
+        .writing-item .writing-number {
+          font-size: clamp(120px, 34vw, 180px);
+          padding: 10px 0;
+        }
+        .writing-item .writing-info {
+          padding: 1.5rem;
+        }
+        .writing-title {
+          font-size: 22px;
+        }
+        .writing-footer {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
+      /* STAR DIVIDER */
+      .star-divider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px 20px;
+        border-top: 3px solid #000;
+        border-bottom: 3px solid #000;
+        background: var(--green-dark);
+        overflow: hidden;
+        flex-wrap: wrap;
+      }
+      .spin-star {
+        font-family: var(--serif);
+        color: var(--yellow);
+        text-shadow: 2px 2px 0 #000;
+        display: inline-block;
+        line-height: 1;
+      }
+      .spin-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        border: 2px solid #000;
+        flex-shrink: 0;
+        box-shadow: 1px 1px 0 #000;
+      }
+      .s1 {
+        font-size: 28px;
+        animation: spin 4s linear infinite;
+      }
+      .s2 {
+        font-size: 18px;
+        animation: spin 3s linear infinite reverse;
+        color: #fff;
+        text-shadow: 1px 1px 0 #000;
+      }
+      .s3 {
+        font-size: 34px;
+        animation: spin 5s linear infinite;
+      }
+      .s4 {
+        font-size: 16px;
+        animation: spin 2.5s linear infinite reverse;
+        color: var(--cream);
+        text-shadow: 1px 1px 0 #000;
+      }
+      .s5 {
+        font-size: 24px;
+        animation: spin 3.5s linear infinite;
+      }
+      .s6 {
+        font-size: 20px;
+        animation: spin 4.5s linear infinite reverse;
+        color: #fff;
+        text-shadow: 1px 1px 0 #000;
+      }
+      .s7 {
+        font-size: 30px;
+        animation: spin 3.8s linear infinite;
+      }
+      .s8 {
+        font-size: 14px;
+        animation: spin 2.8s linear infinite reverse;
+        color: var(--cream);
+      }
+      .s9 {
+        font-size: 26px;
+        animation: spin 4.2s linear infinite;
+      }
+      .d-y {
+        background: var(--yellow);
+      }
+      .d-c {
+        background: var(--crimson);
+      }
+      .d-w {
+        background: #fff;
+      }
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      footer {
+        text-align: center;
+        padding: 1.5rem;
+        font-family: var(--serif);
+        font-weight: 700;
+        font-size: 15px;
+        color: var(--yellow);
+        text-shadow: 1px 1px 0 #000;
+        letter-spacing: 0.08em;
+        border-top: 3px solid #000;
+        background: var(--green-dark);
+        margin-top: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="portfolio_chinese0504.html" class="nav-logo">✦ YINGLIN</a>
+      <a
+        href="portfolio_chinese0504.html"
+        class="nav-back"
+        onclick="if (history.length > 1) { event.preventDefault(); history.back(); }"
+      >
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        返回首页
+      </a>
+    </nav>
+
+    <div class="sub-hero">
+      <h1 class="pop">文化观察</h1>
+      <p class="pop">SNAPSHOTS OF SOCIETY</p>
+    </div>
+
+    <div class="star-divider">
+      <div class="spin-dot d-y"></div>
+      <span class="spin-star s1">★</span>
+      <div class="spin-dot d-c"></div>
+      <span class="spin-star s2">✦</span>
+      <div class="spin-dot d-w"></div>
+      <span class="spin-star s3">★</span>
+      <div class="spin-dot d-y"></div>
+      <span class="spin-star s4">✦</span>
+      <div class="spin-dot d-c"></div>
+      <span class="spin-star s5">★</span>
+      <div class="spin-dot d-w"></div>
+      <span class="spin-star s6">✦</span>
+      <div class="spin-dot d-y"></div>
+      <span class="spin-star s7">★</span>
+      <div class="spin-dot d-c"></div>
+      <span class="spin-star s8">✦</span>
+      <div class="spin-dot d-w"></div>
+      <span class="spin-star s9">★</span>
+      <div class="spin-dot d-y"></div>
+    </div>
+
+    <div class="section writings-section">
+      <div class="deco-blob deco-blob-1"></div>
+      <div class="section-header pop">
+        <div class="sec-icon">✦</div>
+        <div class="section-title">创作集</div>
+      </div>
+
+      <div class="writings-list">
+        <!-- Writing 1 -->
+        <div class="writing-item">
+          <div class="writing-visual-row">
+            <a
+              href="https://furyotter.github.io/INDIEGAME/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="writing-cover-link"
+            >
+              <div class="writing-cover">
+                <img
+                  src="images/writings/独立游戏封面.png"
+                  alt="乘风而行——国产独立游戏冒险之旅封面"
+                />
+              </div>
+            </a>
+            <div class="writing-number">01</div>
+          </div>
+          <div class="writing-info">
+            <div class="writing-title">乘风而行——国产独立游戏冒险之旅</div>
+            <div class="writing-desc">
+              “人类不是先有了文明才学会玩，而是通过‘玩’才孕育出了文明。”从原始社会的爬树、追逐，到封建社会的围棋、比武，再到工业社会的足球、桌游，自古以来，爱玩就在人类的基因里。进入信息时代后，游戏有了新的载体，电子游戏快速发展，逐步成长为成熟的产业，这个体系也催生了许多脍炙人口的3A大作。然而，在工业体系之外，一直有那么一小撮人，凭借几个人的力量，在竞争激烈的游戏市场中，搏出了独立游戏这样一小方天地。他们面临着所有初创团队面对的问题，也面临着所有艺术创作者面对的问题。商业和艺术并不是简单的对立，理想和现实的调和也许比想象中更加艰难。
+            </div>
+            <div class="writing-footer">
+              <div class="writing-tags">
+                <span class="writing-tag">独立游戏</span>
+                <span class="writing-tag">文化观察</span>
+                <span class="writing-tag">长文</span>
+              </div>
+              <a
+                href="https://furyotter.github.io/INDIEGAME/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="writing-read"
+                >访问 →</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Writing 2 -->
+        <div class="writing-item writing-item--number-left">
+          <div class="writing-visual-row">
+            <div class="writing-number">02</div>
+            <a
+              href="https://furyotter.github.io/GirlGamer/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="writing-cover-link"
+            >
+              <div class="writing-cover">
+                <img
+                  src="images/girlgamer.png"
+                  alt="女性玩家，正在改变游戏市场"
+                />
+              </div>
+            </a>
+          </div>
+          <div class="writing-info">
+            <div class="writing-title">女性玩家，正在改变游戏市场</div>
+            <div class="writing-desc">
+              在大众的刻板印象中，女性玩家并非是电子游戏的忠实爱好者。然而，随着移动电子设备的不断发展，女性玩家大量涌入游戏市场。女性的消费力和对游戏的粘着力使游戏开放商业渐渐意识到，女性玩家这一群体在当下也有着不可忽视的地位。说到底，谁不喜欢玩游戏呢？
+            </div>
+            <div class="writing-footer">
+              <div class="writing-tags">
+                <span class="writing-tag">游戏产业</span>
+                <span class="writing-tag">女性玩家</span>
+                <span class="writing-tag">文化观察</span>
+              </div>
+              <a
+                href="https://furyotter.github.io/GirlGamer/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="writing-read"
+                >访问 →</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Writing 3 -->
+        <div class="writing-item">
+          <div class="writing-visual-row">
+            <a
+              href="https://mp.weixin.qq.com/s/4SsiYdyi_LH7n23s3NFKpg"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="writing-cover-link"
+            >
+              <div class="writing-cover">
+                <img
+                  src="images/talkshow.jpg"
+                  alt="街头脱口秀"
+                />
+              </div>
+            </a>
+            <div class="writing-number">03</div>
+          </div>
+          <div class="writing-info">
+            <div class="writing-title">线下脱口秀演员：奔走在笑声里</div>
+            <div class="writing-desc">
+              脱口秀行业的发展，让笑声成为一种可以被排期、被复制、被同时在不同地点生产的商品。而火狼，是这条流水线上自愿上岗的工人。脱口秀在中国的走红，制造了一批人们熟悉的面孔，也制造了更多人们看不见的人——那些把同一套段子打磨半年、等着换给下一批观众的线下脱口秀演员，那些在灯光亮起前五分钟还在街上跑的主持人。火狼属于后者，却并不觉得自己在将就。他知道出圈的路怎么走，只是选择了绕开。在一个人人都在谈论"被看见"的时代，他不焦虑出圈，不抗拒将就，只是每天在不同的剧场间穿梭——上台，拿麦，然后开始表演。
+            </div>
+            <div class="writing-footer">
+              <div class="writing-tags">
+                <span class="writing-tag">脱口秀</span>
+                <span class="writing-tag">人物故事</span>
+                <span class="writing-tag">线下演出</span>
+              </div>
+              <a
+                href="https://mp.weixin.qq.com/s/4SsiYdyi_LH7n23s3NFKpg"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="writing-read"
+                >阅读更多 →</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // One-time scroll reveal for pop elements
+      const popObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              popObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
+      );
+      document
+        .querySelectorAll(".pop")
+        .forEach((el) => popObserver.observe(el));
+
+      // Individual element reveal: each part animates when it enters the viewport
+      const elementObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("in-view");
+            } else {
+              entry.target.classList.remove("in-view");
+            }
+          });
+        },
+        { threshold: 0.15 },
+      );
+      document
+        .querySelectorAll(
+          ".writing-cover, .writing-number, .writing-info",
+        )
+        .forEach((el) => elementObserver.observe(el));
+
+    </script>
+  </body>
+</html>

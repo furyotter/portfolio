@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- 背景方块，留出边距避免裁切 -->
+  <rect x="6" y="6" width="88" height="88" rx="16" fill="#d72660" stroke="#000" stroke-width="5"/>
+  <!-- 白色五角星，放大并居中 -->
+  <polygon points="50,20 58.5,43 83,43 63,57.5 71,81 50,66 29,81 37,57.5 17,43 41.5,43" fill="#fff"/>
+</svg>

@@ -1,0 +1,2280 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>00 SPACE</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --green: #1a9e3f;
+        --green-dark: #0f7a2e;
+        --green-light: #d4f5dc;
+        --yellow: #f5e642;
+        --crimson: #d72660;
+        --crimson-dark: #a81d4a;
+        --cream: #fffbe8;
+        --ink: #1a1a1a;
+        --serif: "Noto Serif SC", serif;
+        --sans: "Noto Sans SC", sans-serif;
+      }
+
+      body {
+        font-family: var(--sans);
+        background: var(--green);
+        color: var(--ink);
+        margin: 0;
+      }
+
+      /* ── SCROLL POP ── */
+      .pop {
+        opacity: 0;
+        transform: scale(0.7);
+        transition: none;
+      }
+      .pop.visible {
+        opacity: 1;
+        transform: scale(1);
+        transition:
+          opacity 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+          transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .pop-group .pop.visible:nth-child(1) {
+        transition-delay: 0s;
+      }
+      .pop-group .pop.visible:nth-child(2) {
+        transition-delay: 0.08s;
+      }
+      .pop-group .pop.visible:nth-child(3) {
+        transition-delay: 0.16s;
+      }
+      .pop-group .pop.visible:nth-child(4) {
+        transition-delay: 0.24s;
+      }
+
+      /* NAV */
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+        background: var(--green-dark);
+        border-bottom: 3px solid #000;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .nav-logo {
+        font-family: var(--serif);
+        font-weight: 900;
+        font-size: 20px;
+        color: var(--yellow);
+        text-shadow: 2px 2px 0 #000;
+        letter-spacing: 0.05em;
+      }
+      .nav-links {
+        display: flex;
+        gap: 0.5rem;
+        list-style: none;
+      }
+      .nav-links a {
+        font-family: var(--serif);
+        font-size: 14px;
+        font-weight: 700;
+        color: #fff;
+        text-decoration: none;
+        padding: 6px 14px;
+        border-radius: 100px;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: all 0.15s;
+        letter-spacing: 0.05em;
+      }
+      .nav-links a:hover {
+        background: var(--yellow);
+        color: var(--ink);
+        border-color: #000;
+      }
+
+      /* HERO */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        text-align: center;
+        overflow: hidden;
+      }
+      .hero-content {
+        transform: translateY(-1vh);
+      }
+      .hero-title-svg--oo {
+        margin-bottom: 0;
+      }
+      .hero-sub {
+        margin-top: -15px;
+      }
+
+      .hero-badge {
+        display: inline-block;
+        background: var(--crimson);
+        color: #fff;
+        font-family: var(--sans);
+        font-size: 12px;
+        font-weight: 700;
+        padding: 5px 16px;
+        border-radius: 100px;
+        border: 2px solid #000;
+        box-shadow: 2px 2px 0 #000;
+        margin-bottom: 1rem;
+        letter-spacing: 0.1em;
+      }
+
+      .hero h1 {
+        width: 100%;
+        margin: 0 auto 0.5rem;
+        line-height: 1;
+      }
+
+      .hero-badge {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(-40px);
+        margin-top: 0;
+      }
+      .hero-badge.show {
+        animation: badgeDropBounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1)
+          forwards;
+      }
+      @keyframes badgeDropBounce {
+        0% {
+          opacity: 0;
+          transform: translateY(-40px);
+        }
+        60% {
+          opacity: 1;
+          transform: translateY(8px);
+        }
+        80% {
+          transform: translateY(-4px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ---- 00 SPACE 描边动效 ---- */
+      .hero-title-svg {
+        display: block;
+        width: auto;
+        height: auto;
+        overflow: visible;
+        margin: 0 auto;
+      }
+      .hero-title-svg--oo {
+        width: min(80vw, 520px);
+      }
+      .hero-title-svg--space {
+        width: min(95vw, 1120px);
+      }
+      .title-letter {
+        fill: transparent;
+        fill-rule: evenodd;
+        stroke: var(--yellow);
+        stroke-width: 3;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        opacity: 0;
+      }
+      .title-letter.is-ready {
+        opacity: 1;
+      }
+      @keyframes titleDrawStroke {
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+      @keyframes titleFillSolid {
+        to {
+          fill: var(--yellow);
+        }
+      }
+      @keyframes titleHideStroke {
+        to {
+          stroke: transparent;
+        }
+      }
+      .is-playing .title-letter.fill-solid {
+        animation:
+          titleDrawStroke 1.8s cubic-bezier(0.65, 0, 0.35, 1) forwards,
+          titleFillSolid 0.7s ease-out forwards,
+          titleHideStroke 0.25s ease-out forwards;
+      }
+      .is-playing .title-letter.fill-hollow {
+        animation: titleDrawStroke 1.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+      }
+      .title-shadow {
+        fill: #000;
+        opacity: 0;
+      }
+      @keyframes titleShadowFadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+      .is-playing .title-shadow {
+        animation: titleShadowFadeIn 0.35s ease-out forwards;
+      }
+      .hero-title {
+        display: block;
+        margin: 0;
+      }
+      .hero-title.is-floating {
+        animation: heroTitleFloat 3s ease-in-out infinite;
+      }
+      @keyframes heroTitleFloat {
+        0%,
+        100% {
+          transform: translateY(0) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-14px) rotate(0.5deg);
+        }
+      }
+
+      .hero-sub {
+        font-family: var(--sans);
+        font-size: 15px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 2rem;
+        text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
+        letter-spacing: 0.06em;
+      }
+      .hero-sub-word {
+        display: inline-block;
+        opacity: 0;
+        transform: translateX(-4px);
+      }
+      .hero-sub.playing .hero-sub-word {
+        animation: heroSubWordIn 0.75s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      }
+      @keyframes heroSubWordIn {
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .hero-card {
+        background: var(--cream);
+        border: 3px solid #000;
+        border-radius: 20px;
+        box-shadow: 6px 6px 0 #000;
+        padding: 2rem;
+        max-width: 480px;
+        margin: 0 auto 2rem;
+        position: relative;
+      }
+      .hero-card::before {
+        content: "★";
+        position: absolute;
+        top: -18px;
+        left: 24px;
+        font-size: 28px;
+        color: var(--yellow);
+        text-shadow: 2px 2px 0 #000;
+      }
+      .hero-card::after {
+        content: "✦";
+        position: absolute;
+        top: -14px;
+        right: 24px;
+        font-size: 22px;
+        color: var(--crimson);
+        text-shadow: 1px 1px 0 #000;
+      }
+
+      .avatar-circle {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background: var(--green-light);
+        border: 3px solid #000;
+        margin: 0 auto 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      .avatar-circle img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 20% center;
+        display: block;
+      }
+
+      .hero-name {
+        font-family: var(--serif);
+        font-weight: 900;
+        font-size: 26px;
+        color: var(--ink);
+        margin-bottom: 4px;
+        letter-spacing: 0.08em;
+        text-align: center;
+      }
+      .hero-role {
+        font-family: var(--sans);
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--green);
+        margin-bottom: 1rem;
+        letter-spacing: 0.1em;
+        text-align: center;
+      }
+      .hero-tagline {
+        font-family: var(--serif);
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--ink);
+        line-height: 1.6;
+        text-align: center;
+        margin: 0 0 1.2rem 0;
+      }
+      .hero-divider {
+        border-top: 1px solid #e8e0c8;
+        margin-bottom: 1.2rem;
+      }
+      .hero-desc {
+        margin-bottom: 1.2rem;
+      }
+      .hero-paragraph {
+        font-family: var(--sans);
+        font-size: 14px;
+        color: #444;
+        line-height: 2.3;
+        text-align: left;
+        margin: 0 0 1.2rem 0;
+      }
+      .hero-paragraph:last-child {
+        margin-bottom: 0;
+      }
+      .hl-word {
+        position: relative;
+        display: inline-block;
+        padding: 0;
+        margin: 0;
+      }
+      .hl-word::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 15%;
+        height: 30%;
+        background: var(--yellow);
+        opacity: 0.85;
+        transform: skew(-20deg);
+        z-index: 0;
+      }
+      .hl-word > span {
+        position: relative;
+        z-index: 1;
+      }
+      .hero-quote {
+        font-family: var(--serif);
+        font-size: 14.5px;
+        font-style: italic;
+        color: #555;
+        line-height: 1.9;
+        text-align: center;
+        margin: 0 0 1.5rem 0;
+        padding: 0 0.5rem;
+      }
+
+      .btn-row {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .btn-crimson {
+        background: var(--crimson);
+        color: #fff;
+        border: 3px solid #000;
+        box-shadow: 4px 4px 0 #000;
+        padding: 12px 28px;
+        font-family: var(--serif);
+        font-size: 15px;
+        font-weight: 700;
+        border-radius: 100px;
+        cursor: pointer;
+        transition: all 0.1s;
+        letter-spacing: 0.06em;
+      }
+      .btn-crimson:hover {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0 #000;
+      }
+
+      .btn-yellow {
+        background: var(--yellow);
+        color: var(--ink);
+        border: 3px solid #000;
+        box-shadow: 4px 4px 0 #000;
+        padding: 12px 28px;
+        font-family: var(--serif);
+        font-size: 15px;
+        font-weight: 700;
+        border-radius: 100px;
+        cursor: pointer;
+        transition: all 0.1s;
+        letter-spacing: 0.06em;
+      }
+      .btn-yellow:hover {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0 #000;
+      }
+
+      /* STAR DIVIDER */
+      .star-divider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px 20px;
+        border-top: 3px solid #000;
+        border-bottom: 3px solid #000;
+        background: var(--green-dark);
+        overflow: hidden;
+        flex-wrap: wrap;
+      }
+      .spin-star {
+        font-family: var(--serif);
+        color: var(--yellow);
+        text-shadow: 2px 2px 0 #000;
+        display: inline-block;
+        line-height: 1;
+      }
+      .spin-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        border: 2px solid #000;
+        flex-shrink: 0;
+        box-shadow: 1px 1px 0 #000;
+      }
+      .s1 {
+        font-size: 28px;
+        animation: spin 4s linear infinite;
+      }
+      .s2 {
+        font-size: 18px;
+        animation: spin 3s linear infinite reverse;
+        color: #fff;
+        text-shadow: 1px 1px 0 #000;
+      }
+      .s3 {
+        font-size: 34px;
+        animation: spin 5s linear infinite;
+      }
+      .s4 {
+        font-size: 16px;
+        animation: spin 2.5s linear infinite reverse;
+        color: var(--cream);
+        text-shadow: 1px 1px 0 #000;
+      }
+      .s5 {
+        font-size: 24px;
+        animation: spin 3.5s linear infinite;
+      }
+      .s6 {
+        font-size: 20px;
+        animation: spin 4.5s linear infinite reverse;
+        color: #fff;
+        text-shadow: 1px 1px 0 #000;
+      }
+      .s7 {
+        font-size: 30px;
+        animation: spin 3.8s linear infinite;
+      }
+      .s8 {
+        font-size: 14px;
+        animation: spin 2.8s linear infinite reverse;
+        color: var(--cream);
+      }
+      .s9 {
+        font-size: 26px;
+        animation: spin 4.2s linear infinite;
+      }
+      .d-y {
+        background: var(--yellow);
+      }
+      .d-c {
+        background: var(--crimson);
+      }
+      .d-w {
+        background: #fff;
+      }
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* SECTIONS */
+      .section {
+        padding: 2rem;
+        max-width: 800px;
+        margin: 0 auto;
+        scroll-margin-top: var(--nav-height, 60px);
+      }
+
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 1.5rem;
+      }
+      .section-title {
+        font-family: var(--serif);
+        font-weight: 900;
+        font-size: 26px;
+        color: var(--yellow);
+        text-shadow: 2px 2px 0 #000;
+        letter-spacing: 0.06em;
+      }
+      .sec-icon {
+        background: var(--crimson);
+        color: #fff;
+        border: 2px solid #000;
+        border-radius: 8px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        box-shadow: 2px 2px 0 #000;
+        flex-shrink: 0;
+      }
+      .sec-icon--contact svg,
+      .sec-icon--resume svg {
+        width: 20px;
+        height: 20px;
+        stroke: currentColor;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+      }
+
+      /* ABOUT */
+      .about-card {
+        background: var(--cream);
+        border: 3px solid #000;
+        border-radius: 20px;
+        box-shadow: 6px 6px 0 #000;
+        padding: 1.6rem;
+      }
+      .about-lead {
+        border-left: 4px solid var(--crimson);
+        padding-left: 14px;
+        margin-bottom: 1.5rem;
+      }
+      .about-lead p {
+        font-family: var(--serif);
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--ink);
+        line-height: 1.8;
+        margin: 0;
+      }
+      .about-block {
+        margin-bottom: 1.4rem;
+      }
+      .about-label {
+        font-family: var(--sans);
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--green-dark);
+        letter-spacing: 0.06em;
+        margin-bottom: 6px;
+      }
+      .about-block p {
+        font-family: var(--sans);
+        font-size: 14px;
+        color: #444;
+        line-height: 1.9;
+        margin: 0;
+      }
+      .about-summary {
+        margin-bottom: 1.5rem;
+        padding-top: 0.2rem;
+        border-top: 1px solid #e8e0c8;
+      }
+      .about-summary p {
+        font-family: var(--sans);
+        font-size: 14px;
+        color: #444;
+        line-height: 1.9;
+        margin: 0.9rem 0 0.6rem 0;
+      }
+      .about-summary p:last-child {
+        color: var(--ink);
+        font-weight: 700;
+        margin: 0;
+      }
+      .about-ai {
+        border-top: 1px solid #e8e0c8;
+        padding-top: 1.2rem;
+      }
+      .about-ai-intro {
+        font-family: var(--sans);
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--ink);
+        margin: 0 0 0.9rem 0;
+        line-height: 1.7;
+      }
+      .about-ai-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+      .about-ai-list li {
+        border-top: none;
+      }
+      .about-ai-list details summary {
+        font-family: var(--sans);
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--ink);
+        cursor: pointer;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0.8rem 0;
+      }
+      .about-ai-list details summary::-webkit-details-marker {
+        display: none;
+      }
+      .about-ai-list details summary::before {
+        content: "▸";
+        color: var(--crimson);
+        font-size: 13px;
+        transition: transform 0.2s;
+      }
+      .about-ai-list details[open] summary::before {
+        transform: rotate(90deg);
+      }
+      .about-ai-list details p {
+        font-family: var(--sans);
+        margin: 0 0 0.9rem 0;
+        padding-left: 1.3rem;
+        font-size: 13px;
+        color: #555;
+        line-height: 1.85;
+      }
+
+      .stats-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 1rem;
+      }
+      .stat-box {
+        background: var(--green-light);
+        border: 2px solid #000;
+        border-radius: 12px;
+        box-shadow: 3px 3px 0 #000;
+        padding: 1rem;
+        text-align: center;
+      }
+      .stat-num {
+        font-family: var(--serif);
+        font-weight: 900;
+        font-size: 32px;
+        color: var(--green-dark);
+        line-height: 1;
+      }
+      .stat-label {
+        font-family: var(--sans);
+        font-size: 12px;
+        font-weight: 700;
+        color: #666;
+        margin-top: 2px;
+        letter-spacing: 0.05em;
+      }
+
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 1rem;
+      }
+      .tag {
+        background: var(--yellow);
+        border: 2px solid #000;
+        border-radius: 100px;
+        padding: 5px 14px;
+        font-family: var(--sans);
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--ink);
+        box-shadow: 2px 2px 0 #000;
+        letter-spacing: 0.05em;
+      }
+
+      /* PUFFY FOLDERS */
+      .folders-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 28px;
+        max-width: 560px;
+        margin: 0 auto;
+      }
+
+      .folder-puffy {
+        cursor: pointer;
+        transition: transform 0.15s;
+      }
+      .folder-puffy:hover {
+        transform: translateY(-5px) rotate(-1.5deg);
+      }
+
+      .puffy-tab {
+        height: 22px;
+        width: 52%;
+        border-radius: 12px 12px 0 0;
+        border: 3px solid #000;
+        border-bottom: none;
+        margin-left: 12px;
+        position: relative;
+        z-index: 1;
+      }
+      .puffy-body {
+        border: 3px solid #000;
+        border-radius: 4px 16px 16px 16px;
+        box-shadow: 5px 5px 0 #000;
+        padding: 16px;
+        position: relative;
+        margin-top: -2px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-height: 130px;
+      }
+      .puffy-pin {
+        position: absolute;
+        top: -9px;
+        right: 16px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 2px solid #000;
+        box-shadow: 1px 1px 0 #000;
+      }
+      .puffy-cat {
+        font-family: var(--sans);
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--crimson);
+      }
+      .puffy-name {
+        font-family: var(--serif);
+        font-weight: 900;
+        font-size: 18px;
+        color: var(--ink);
+        line-height: 1.2;
+        letter-spacing: 0.04em;
+      }
+      .puffy-desc {
+        font-family: var(--sans);
+        font-size: 12px;
+        font-weight: 400;
+        color: #666;
+        line-height: 1.6;
+      }
+      .puffy-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-top: auto;
+      }
+      .puffy-view {
+        display: none;
+      }
+
+      /* FAVORITES */
+      .favorites-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 28px;
+        max-width: 560px;
+        margin: 0 auto;
+      }
+      .favorite-card {
+        position: relative;
+        padding: 2rem 1rem 1.4rem;
+        text-align: center;
+        background: var(--cream);
+        border: 3px solid #000;
+        border-radius: 16px;
+        box-shadow: 5px 5px 0 #000;
+        transition:
+          transform 0.1s,
+          box-shadow 0.1s;
+      }
+      .favorite-card:hover {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0 #000;
+      }
+      .favorite-card::after {
+        content: "正在施工中，敬请期待...";
+        position: absolute;
+        inset: 0;
+        background: rgba(26, 30, 30, 0.82);
+        color: #fff;
+        font-family: var(--serif);
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 1rem;
+        border-radius: 13px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+        z-index: 3;
+      }
+      .favorite-card:hover::after {
+        opacity: 1;
+      }
+      .favorite-card-bg {
+        display: none;
+      }
+      .favorite-tape {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        width: 60px;
+        height: 22px;
+        z-index: 2;
+        pointer-events: none;
+      }
+      .favorite-card:nth-child(1) .favorite-tape {
+        transform: translateX(-50%) rotate(-5deg);
+      }
+      .favorite-card:nth-child(2) .favorite-tape {
+        transform: translateX(-50%) rotate(4deg);
+      }
+      .favorite-card:nth-child(3) .favorite-tape {
+        transform: translateX(-50%) rotate(-4deg);
+      }
+      .favorite-card:nth-child(4) .favorite-tape {
+        transform: translateX(-50%) rotate(5deg);
+      }
+      .favorite-card-inner {
+        position: relative;
+        z-index: 1;
+        padding-top: 0.4rem;
+      }
+      .favorite-icon {
+        width: 26px;
+        height: 26px;
+        margin: 8px auto 6px;
+        display: block;
+        stroke: var(--ink);
+        stroke-width: 2.2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+      }
+      .favorite-title {
+        font-family: var(--serif);
+        font-weight: 900;
+        font-size: 15px;
+        color: var(--ink);
+      }
+      @media (max-width: 720px) {
+        .favorites-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 420px) {
+        .favorites-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* RESUME */
+      .resume-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .resume-item {
+        background: var(--cream);
+        border: 2px solid #000;
+        border-radius: 14px;
+        box-shadow: 4px 4px 0 #000;
+        padding: 1rem 1.25rem;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        position: relative;
+      }
+      .resume-item-clickable {
+        cursor: pointer;
+        transition:
+          transform 0.1s,
+          box-shadow 0.1s,
+          background 0.1s;
+      }
+      .resume-item-clickable:hover {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0 #000;
+      }
+      .resume-arrow {
+        margin-left: auto;
+        flex-shrink: 0;
+        width: 36px;
+        height: 36px;
+        background: var(--yellow);
+        border: 2px solid #000;
+        border-radius: 50%;
+        box-shadow: 2px 2px 0 #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.1s;
+        text-decoration: none;
+      }
+      .resume-arrow:hover {
+        transform: translate(2px, 2px);
+        box-shadow: 0px 0px 0 #000;
+      }
+      .resume-arrow svg {
+        width: 18px;
+        height: 18px;
+      }
+      .resume-year-badge {
+        background: var(--crimson);
+        color: #fff;
+        font-family: var(--sans);
+        font-size: 11px;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 100px;
+        border: 2px solid #000;
+        white-space: nowrap;
+        flex-shrink: 0;
+        letter-spacing: 0.05em;
+        width: 130px;
+        text-align: center;
+      }
+      .resume-role {
+        font-family: var(--serif);
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--ink);
+        margin-bottom: 2px;
+        letter-spacing: 0.04em;
+      }
+      .resume-place {
+        font-family: var(--sans);
+        font-size: 12px;
+        font-weight: 400;
+        color: #777;
+      }
+
+      /* CONTACT */
+      .contact-card {
+        background: var(--cream);
+        border: 3px solid #000;
+        border-radius: 20px;
+        box-shadow: 6px 6px 0 #000;
+        padding: 2rem;
+        text-align: center;
+      }
+      .contact-card h2 {
+        font-family: var(--serif);
+        font-weight: 900;
+        font-size: 30px;
+        color: var(--green-dark);
+        margin-bottom: 0.5rem;
+        letter-spacing: 0.06em;
+      }
+      .contact-card p {
+        font-family: var(--sans);
+        font-size: 14px;
+        font-weight: 400;
+        color: #555;
+        line-height: 1.9;
+        margin-bottom: 1.5rem;
+      }
+      .contact-links-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .contact-link {
+        background: var(--green-light);
+        border: 2px solid #000;
+        border-radius: 12px;
+        box-shadow: 3px 3px 0 #000;
+        padding: 12px 16px;
+        font-family: var(--sans);
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--green-dark);
+        cursor: pointer;
+        transition: all 0.1s;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        letter-spacing: 0.04em;
+      }
+      .contact-link:hover {
+        transform: translate(2px, 2px);
+        box-shadow: 1px 1px 0 #000;
+      }
+
+      /* QR LIGHTBOX */
+      .qr-lightbox {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      }
+      .qr-lightbox.active {
+        display: flex;
+      }
+      .qr-lightbox-backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(4px);
+      }
+      .qr-lightbox-content {
+        position: relative;
+        background: var(--green);
+        border: 3px solid #000;
+        border-radius: 20px;
+        box-shadow: 8px 8px 0 #000;
+        padding: 1.5rem;
+        max-width: 360px;
+        width: 90%;
+        text-align: center;
+        z-index: 1;
+      }
+      .qr-lightbox-title {
+        font-family: var(--serif);
+        font-size: 20px;
+        font-weight: 900;
+        color: var(--yellow);
+        text-shadow: 2px 2px 0 #000;
+        margin-bottom: 1rem;
+        letter-spacing: 0.06em;
+      }
+      .qr-lightbox-content img {
+        width: 100%;
+        max-width: 280px;
+        border-radius: 12px;
+        border: 2px solid #000;
+        display: block;
+        margin: 0 auto;
+      }
+      .qr-lightbox-close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        border: 3px solid #000;
+        border-radius: 50%;
+        background: var(--crimson);
+        color: #fff;
+        font-size: 20px;
+        font-weight: 900;
+        cursor: pointer;
+        box-shadow: 2px 2px 0 #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .qr-lightbox-close:hover {
+        background: var(--yellow);
+        color: var(--ink);
+      }
+
+      /* MESSAGE MODAL */
+      .message-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      }
+      .message-modal.active {
+        display: flex;
+      }
+      .message-modal-backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(4px);
+      }
+      .message-modal-content {
+        position: relative;
+        background: var(--cream);
+        border: 3px solid #000;
+        border-radius: 20px;
+        box-shadow: 8px 8px 0 #000;
+        max-width: 380px;
+        width: 90%;
+        padding: 1.5rem;
+        z-index: 1;
+      }
+      .message-modal-close {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        width: 28px;
+        height: 28px;
+        background: #fff;
+        border: 2px solid #000;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 2px 2px 0 #000;
+        color: var(--ink);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
+      .message-modal-close:hover {
+        background: var(--crimson);
+        color: #fff;
+      }
+      .message-modal-title {
+        font-family: var(--serif);
+        font-weight: 900;
+        font-size: 22px;
+        color: var(--ink);
+        margin-bottom: 4px;
+        padding-right: 30px;
+      }
+      .message-modal-subtitle {
+        font-family: var(--sans);
+        font-size: 13px;
+        color: #777;
+        margin-bottom: 1.2rem;
+        line-height: 1.6;
+      }
+      .message-form-group {
+        margin-bottom: 0.9rem;
+      }
+      .message-form-group label {
+        display: block;
+        font-family: var(--sans);
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--ink);
+        margin-bottom: 6px;
+        letter-spacing: 0.03em;
+      }
+      .message-form-group input,
+      .message-form-group textarea {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 9px 12px;
+        border: 2px solid #000;
+        border-radius: 10px;
+        font-size: 13px;
+        font-family: var(--sans);
+        background: #fff;
+        outline: none;
+      }
+      .message-form-group textarea {
+        resize: none;
+      }
+      .message-form-submit {
+        width: 100%;
+        background: var(--crimson);
+        color: #fff;
+        border: 2px solid #000;
+        border-radius: 100px;
+        padding: 11px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 3px 3px 0 #000;
+        letter-spacing: 0.04em;
+        font-family: var(--sans);
+      }
+
+      /* RESUME LIGHTBOX */
+      .resume-lightbox {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      }
+      .resume-lightbox.active {
+        display: flex;
+      }
+      .resume-lightbox-backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(4px);
+      }
+      .resume-lightbox-content {
+        position: relative;
+        background: var(--green);
+        border: 3px solid #000;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        padding: 2rem;
+        width: min(90vw, 420px);
+        z-index: 1;
+        text-align: center;
+      }
+      .resume-lightbox-title {
+        font-family: var(--serif);
+        font-size: 24px;
+        font-weight: 900;
+        color: var(--yellow);
+        margin-bottom: 1.5rem;
+        letter-spacing: 0.06em;
+      }
+      .resume-download-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 1.5rem;
+      }
+      .resume-download-link {
+        display: block;
+        background: var(--cream);
+        color: var(--ink);
+        border: 3px solid #000;
+        border-radius: 12px;
+        padding: 14px 18px;
+        font-family: var(--sans);
+        font-size: 15px;
+        font-weight: 700;
+        text-decoration: none;
+        box-shadow: 3px 3px 0 #000;
+        transition:
+          transform 0.1s,
+          box-shadow 0.1s,
+          background 0.15s;
+      }
+      .resume-download-link:hover {
+        transform: translate(2px, 2px);
+        box-shadow: 1px 1px 0 #000;
+        background: var(--yellow);
+      }
+      .resume-lightbox-close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        border: 3px solid #000;
+        border-radius: 50%;
+        background: var(--crimson);
+        color: #fff;
+        font-size: 20px;
+        font-weight: 900;
+        cursor: pointer;
+        box-shadow: 2px 2px 0 #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .resume-lightbox-close:hover {
+        background: var(--yellow);
+        color: var(--ink);
+      }
+
+      footer {
+        text-align: center;
+        padding: 1.5rem;
+        font-family: var(--serif);
+        font-weight: 700;
+        font-size: 15px;
+        color: var(--yellow);
+        text-shadow: 1px 1px 0 #000;
+        letter-spacing: 0.08em;
+        border-top: 3px solid #000;
+        background: var(--green-dark);
+        margin-top: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <span class="nav-logo">✦ YINGLIN</span>
+      <ul class="nav-links">
+        <li><a href="#about">关于我</a></li>
+        <li><a href="#resume">我的履历</a></li>
+        <li><a href="#works">作品集</a></li>
+        <li><a href="#contact">联系</a></li>
+      </ul>
+    </nav>
+
+    <div class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">✦ 持续更新中 · 欢迎光临 ✦</div>
+        <h1 class="hero-title" id="heroTitle">
+          <svg
+            class="hero-title-svg hero-title-svg--oo"
+            viewBox="0 0 260 110"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <filter id="titleShadow" x="-50%" y="-50%" width="200%" height="200%">
+                <feOffset in="SourceAlpha" dx="5" dy="5" result="offset"/>
+                <feFlood flood-color="#000"/>
+                <feComposite in2="offset" operator="in" result="shadow"/>
+                <feMerge>
+                  <feMergeNode in="shadow"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            <g style="filter: url(#titleShadow)">
+              <g transform="translate(61.0, 90.0)"><path d="M31.950000000000003 1.0Q19.400000000000002 1.0 11.450000000000001 -8.200000000000001Q3.5 -17.400000000000002 3.5 -35.1Q3.5 -52.800000000000004 11.5 -61.85000000000001Q19.5 -70.9 32.150000000000006 -70.9Q44.800000000000004 -70.9 52.60000000000001 -61.900000000000006Q60.400000000000006 -52.900000000000006 60.400000000000006 -34.800000000000004Q60.400000000000006 -16.7 52.45 -7.85Q44.5 1.0 31.950000000000003 1.0ZM31.950000000000003 -51.7Q28.1 -51.7 25.450000000000003 -47.35Q22.8 -43.0 22.8 -35.0Q22.8 -27.0 25.35 -22.75Q27.900000000000002 -18.5 31.950000000000003 -18.5Q36.0 -18.5 38.55 -22.8Q41.1 -27.1 41.1 -35.1Q41.1 -43.1 38.45 -47.400000000000006Q35.800000000000004 -51.7 31.950000000000003 -51.7Z" class="title-letter fill-solid" /></g>
+              <g transform="translate(136.1, 90.0)"><path d="M31.950000000000003 1.0Q19.400000000000002 1.0 11.450000000000001 -8.200000000000001Q3.5 -17.400000000000002 3.5 -35.1Q3.5 -52.800000000000004 11.5 -61.85000000000001Q19.5 -70.9 32.150000000000006 -70.9Q44.800000000000004 -70.9 52.60000000000001 -61.900000000000006Q60.400000000000006 -52.900000000000006 60.400000000000006 -34.800000000000004Q60.400000000000006 -16.7 52.45 -7.85Q44.5 1.0 31.950000000000003 1.0ZM31.950000000000003 -51.7Q28.1 -51.7 25.450000000000003 -47.35Q22.8 -43.0 22.8 -35.0Q22.8 -27.0 25.35 -22.75Q27.900000000000002 -18.5 31.950000000000003 -18.5Q36.0 -18.5 38.55 -22.8Q41.1 -27.1 41.1 -35.1Q41.1 -43.1 38.45 -47.400000000000006Q35.800000000000004 -51.7 31.950000000000003 -51.7Z" class="title-letter fill-solid" /></g>
+            </g>
+          </svg>
+          <svg
+            class="hero-title-svg hero-title-svg--space"
+            viewBox="0 0 560 110"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <filter id="titleShadow2" x="-50%" y="-50%" width="200%" height="200%">
+                <feOffset in="SourceAlpha" dx="5" dy="5" result="offset"/>
+                <feFlood flood-color="#000"/>
+                <feComposite in2="offset" operator="in" result="shadow"/>
+                <feMerge>
+                  <feMergeNode in="shadow"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            <g style="filter: url(#titleShadow2)">
+              <g transform="translate(136.6, 75.0)"><path d="M7.6000000000000005 -24.400000000000002Q9.5 -22.900000000000002 14.15 -20.3Q18.8 -17.7 23.05 -17.7Q27.3 -17.7 27.3 -21.0Q27.3 -22.5 26.1 -23.65Q24.900000000000002 -24.8 21.700000000000003 -26.3Q18.5 -27.8 16.9 -28.65Q15.3 -29.5 12.65 -31.45Q10.0 -33.4 8.6 -35.5Q4.6000000000000005 -41.2 4.6000000000000005 -50.0Q4.6000000000000005 -58.800000000000004 11.15 -64.85000000000001Q17.7 -70.9 28.3 -70.9Q35.5 -70.9 41.6 -69.35Q47.7 -67.8 47.900000000000006 -65.3Q47.900000000000006 -65.0 47.900000000000006 -64.7Q47.900000000000006 -61.2 45.7 -55.85Q43.5 -50.5 42.6 -49.900000000000006Q36.2 -53.2 31.150000000000002 -53.2Q26.1 -53.2 26.1 -49.6Q26.1 -47.400000000000006 29.8 -45.7Q30.6 -45.300000000000004 32.1 -44.60000000000001Q33.6 -43.900000000000006 35.55 -42.95Q37.5 -42.0 39.75 -40.55Q42.0 -39.1 44.6 -36.7Q49.900000000000006 -31.700000000000003 49.900000000000006 -23.5Q49.900000000000006 -12.8 44.0 -6.0Q38.1 0.8 25.8 1.0Q19.8 1.0 14.950000000000001 0.0Q10.100000000000001 -1.0 6.500000000000001 -3.9000000000000004Q2.9000000000000004 -6.800000000000001 2.9000000000000004 -10.9Q2.9000000000000004 -15.0 4.4 -19.05Q5.9 -23.1 7.6000000000000005 -24.400000000000002Z" class="title-letter fill-hollow" /></g>
+              <g transform="translate(199.1, 75.0)"><path d="M13.700000000000001 0.2Q4.6000000000000005 0.2 4.6000000000000005 -1.8V-66.60000000000001Q4.6000000000000005 -70.0 7.7 -70.0H25.3Q40.1 -70.0 46.650000000000006 -63.900000000000006Q53.2 -57.800000000000004 53.2 -46.2Q53.2 -36.6 47.0 -28.6Q43.900000000000006 -24.6 37.900000000000006 -22.200000000000003Q31.900000000000002 -19.8 23.900000000000002 -19.8V-1.9000000000000001Q23.900000000000002 -0.7000000000000001 20.150000000000002 -0.25Q16.400000000000002 0.2 13.700000000000001 0.2ZM23.900000000000002 -52.6V-36.800000000000004H25.200000000000003Q28.700000000000003 -36.800000000000004 31.1 -39.0Q33.5 -41.2 33.5 -45.2Q33.5 -49.2 31.85 -50.900000000000006Q30.200000000000003 -52.6 26.0 -52.6Z" class="title-letter fill-hollow" /></g>
+              <g transform="translate(250.3, 75.0)"><path d="M52.0 0.2Q43.300000000000004 0.2 42.6 -2.6L39.300000000000004 -15.5H23.400000000000002L20.5 -3.1Q19.900000000000002 0.0 10.9 0.0Q6.1000000000000005 0.0 3.8000000000000003 -0.55Q1.5 -1.1 1.5 -1.4000000000000001L19.200000000000003 -69.10000000000001Q19.200000000000003 -69.9 32.900000000000006 -69.9Q46.6 -69.9 46.6 -69.10000000000001L63.900000000000006 -1.3Q63.900000000000006 -0.6000000000000001 59.300000000000004 -0.20000000000000004Q54.7 0.2 52.0 0.2ZM25.900000000000002 -28.200000000000003H36.4L31.900000000000002 -48.900000000000006H31.3Z" class="title-letter fill-hollow" /></g>
+              <g transform="translate(314.8, 75.0)"><path d="M44.900000000000006 -49.5Q44.400000000000006 -49.5 43.75 -50.05Q43.1 -50.6 40.75 -51.25Q38.400000000000006 -51.900000000000006 36.7 -51.900000000000006Q30.900000000000002 -51.900000000000006 27.35 -47.800000000000004Q23.8 -43.7 23.8 -35.25Q23.8 -26.8 27.450000000000003 -22.700000000000003Q31.1 -18.6 36.7 -18.6Q39.0 -18.6 41.85 -19.25Q44.7 -19.900000000000002 45.900000000000006 -21.1Q46.1 -21.3 46.7 -21.3Q47.300000000000004 -21.3 48.95 -19.05Q50.6 -16.8 52.0 -13.15Q53.400000000000006 -9.5 53.400000000000006 -7.5Q53.400000000000006 -3.6 47.400000000000006 -1.3Q41.400000000000006 1.0 33.2 1.0Q20.0 1.0 11.5 -8.3Q3.0 -17.6 3.0 -34.55Q3.0 -51.5 11.75 -61.2Q20.5 -70.9 33.6 -70.9Q40.900000000000006 -70.9 46.45 -68.85Q52.0 -66.8 52.0 -63.3Q52.0 -59.800000000000004 49.35 -54.650000000000006Q46.7 -49.5 44.900000000000006 -49.5Z" class="title-letter fill-hollow" /></g>
+              <g transform="translate(372.7, 75.0)"><path d="M37.5 -42.2Q39.400000000000006 -42.2 39.400000000000006 -35.2Q39.400000000000006 -33.1 38.95 -30.25Q38.5 -27.400000000000002 37.300000000000004 -27.400000000000002H24.6V-17.400000000000002H43.0Q44.7 -17.400000000000002 45.300000000000004 -13.0Q45.6 -11.100000000000001 45.6 -8.950000000000001Q45.6 -6.800000000000001 45.0 -3.4000000000000004Q44.400000000000006 0.0 43.0 0.0H8.8Q5.0 0.0 5.0 -3.1V-67.4Q5.0 -70.0 7.300000000000001 -70.0H43.1Q45.2 -70.0 45.2 -61.150000000000006Q45.2 -52.300000000000004 43.1 -52.300000000000004H24.6V-42.2Z" class="title-letter fill-hollow" /></g>
+            </g>
+          </svg>
+        </h1>
+        <p class="hero-sub">WORK WITH RIGOR, LIVE WITH LOVE.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="hero-card pop">
+        <div class="avatar-circle">
+          <img src="images/avatar-crop.jpg" alt="李映霖头像" />
+        </div>
+        <div class="hero-name">李映霖</div>
+        <div class="hero-role">EXPLORER · DOER · HUMANIST</div>
+        <div class="hero-tagline">对世界保持好奇，对成长保持耐心。</div>
+        <div class="hero-divider"></div>
+        <div class="hero-desc">
+          <p class="hero-paragraph">
+            我喜欢<span class="hl-word"><span>学习新事物</span></span
+            >，喜欢把想法变成<span class="hl-word"><span>实际作品</span></span
+            >。喜欢探索不确定的事情，并一点一点把它们弄明白。
+          </p>
+          <p class="hero-paragraph">
+            我愿意投入时间去<span class="hl-word"><span>工作</span></span
+            >、去<span class="hl-word"><span>面对复杂</span></span
+            >、去<span class="hl-word"><span>解决问题</span></span
+            >。
+          </p>
+          <p class="hero-paragraph">
+            比起天赋，我更相信持续的积累；比起确定答案，我更享受探索的过程。
+          </p>
+        </div>
+
+        <div class="btn-row">
+          <button
+            class="btn-crimson"
+            onclick="
+              document
+                .getElementById('works-divider')
+                .scrollIntoView({ behavior: 'smooth' })
+            "
+          >
+            查看作品 ★
+          </button>
+          <button
+            class="btn-yellow"
+            onclick="
+              document
+                .getElementById('contact-divider')
+                .scrollIntoView({ behavior: 'smooth' })
+            "
+          >
+            打个招呼 ✦
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="star-divider">
+      <div class="spin-dot d-y"></div>
+      <span class="spin-star s1">★</span>
+      <div class="spin-dot d-c"></div>
+      <span class="spin-star s2">✦</span>
+      <div class="spin-dot d-w"></div>
+      <span class="spin-star s3">★</span>
+      <div class="spin-dot d-y"></div>
+      <span class="spin-star s4">✦</span>
+      <div class="spin-dot d-c"></div>
+      <span class="spin-star s5">★</span>
+      <div class="spin-dot d-w"></div>
+      <span class="spin-star s6">✦</span>
+      <div class="spin-dot d-y"></div>
+      <span class="spin-star s7">★</span>
+      <div class="spin-dot d-c"></div>
+      <span class="spin-star s8">✦</span>
+      <div class="spin-dot d-w"></div>
+      <span class="spin-star s9">★</span>
+      <div class="spin-dot d-y"></div>
+    </div>
+
+    <div id="about" class="section">
+      <div class="section-header pop">
+        <div class="sec-icon">★</div>
+        <div class="section-title">关于我</div>
+      </div>
+      <div class="about-card pop">
+        <div class="about-lead">
+          <p>
+            你好，我是李映霖
+            :）目前本科毕业2年。毕业后在BOSS直聘做产品运营，之后GAP了一年。
+          </p>
+        </div>
+
+        <div class="about-block">
+          <div class="about-label">▸ GAP 期间在做什么</div>
+          <p>
+            在GAP期间，因为想学摄影，所以做了3个月的摄影助理；想要了解电商行业，所以自己开了一个网店；网店需要拍摄宣传视频，所以自己搭了个视频脚本生成工作流；找工作过程中想要提高面试准备效率，所以做了一个面试助手插件；自己生活中有拖延症问题，所以在开发一个任务规划
+            PWA——设计灵感来自游戏机制，试图解决"任务推进依赖意志力"这一问题。
+          </p>
+        </div>
+
+        <div class="about-block">
+          <div class="about-label">▸ 这一年还做了这些</div>
+          <p>
+            除此之外，GAP的一年中，我还学习了编程知识，做了一些mini项目，写了一些文字，阅读了大量感兴趣的书籍，参与了一些线下活动，结识了一些不同背景的人，去了一些想去的地方。
+          </p>
+        </div>
+
+        <div class="about-summary">
+          <p>
+            这一年的GAP经历，让我丰富了对自我的认识和了解，也让我更新了对工作的理解和认知。
+          </p>
+          <p>现在，我在更多寻找与策划、沟通、统筹、方案设计相关的工作。</p>
+        </div>
+
+        <div class="about-ai">
+          <p class="about-ai-intro">
+            关于AI，我在积极探索中，但也保持着谨慎的态度，目前感兴趣的两个方向是：
+          </p>
+          <ul class="about-ai-list">
+            <li>
+              <details>
+                <summary>AI + 人文</summary>
+                <p>
+                  我希望打造的，不是让AI淘汰人的工具。思考的过程、犯错的乐趣，应该被珍视，而非取代。我更愿意利用AI的能力，去创造有温度的产品，让生活变得更加幸福，也让人活得更像“人”。为实现这个目标，我在不断学习新技术中，探索AI与人文融合的更多可能性。
+                </p>
+              </details>
+            </li>
+            <li>
+              <details>
+                <summary>AI 与难题</summary>
+                <p>
+                  每个领域都有积重难返的复杂问题，长期以来因各种原因困扰行业。在这样的背景下，技术的发展能否带来突破性的解决方案？复杂的系统性问题往往需要多方面的支持与协同，单靠AI难以彻底化解，但它可以成为解决方案的重要组成部分。特别是随着模型和agent能力的提升，一些过去在业务或生活中难以解决的问题，是否能从细微处切入，创造新的局部优化方案？未来，我希望能参与到这样的工作中，利用AI的技术力量为复杂问题寻找更多可能性。
+                </p>
+              </details>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="star-divider">
+      <div class="spin-dot d-w"></div>
+      <span class="spin-star s5">★</span>
+      <div class="spin-dot d-y"></div>
+      <span class="spin-star s8">✦</span>
+      <div class="spin-dot d-c"></div>
+      <span class="spin-star s2">★</span>
+      <div class="spin-dot d-w"></div>
+      <span class="spin-star s7">✦</span>
+      <div class="spin-dot d-y"></div>
+      <span class="spin-star s4">★</span>
+      <div class="spin-dot d-c"></div>
+      <span class="spin-star s1">✦</span>
+      <div class="spin-dot d-w"></div>
+      <span class="spin-star s6">★</span>
+      <div class="spin-dot d-y"></div>
+      <span class="spin-star s3">✦</span>
+      <div class="spin-dot d-c"></div>
+      <span class="spin-star s9">★</span>
+      <div class="spin-dot d-w"></div>
+    </div>
+
+    <div id="resume" class="section">
+      <div class="section-header pop">
+        <div class="sec-icon sec-icon--resume">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+          </svg>
+        </div>
+        <div class="section-title">我的经历</div>
+      </div>
+      <div class="resume-list pop-group">
+        <div class="resume-item pop">
+          <span class="resume-year-badge">2020.09 - 2024.06</span>
+          <div>
+            <div class="resume-role">数据新闻专业 本科</div>
+            <div class="resume-place">中国传媒大学</div>
+          </div>
+        </div>
+        <div
+          class="resume-item resume-item-clickable pop"
+          onclick="window.location.href = 'work-experience.html'"
+          title="查看工作经历详情"
+        >
+          <span class="resume-year-badge">2024.07 – 2025.04</span>
+          <div style="flex: 1">
+            <div class="resume-role">产品运营</div>
+            <div class="resume-place">BOSS直聘，北京</div>
+          </div>
+          <span class="resume-arrow">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#1a1a1a"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </span>
+        </div>
+        <div class="resume-item pop">
+          <span class="resume-year-badge">2025.05 - 至今</span>
+          <div>
+            <div class="resume-role">GAP中...</div>
+            <div class="resume-place">旅居青岛，现居杭州</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 1.25rem; text-align: center" class="pop">
+        <button class="btn-yellow" onclick="openResumeLightbox()">
+          下载简历 ★
+        </button>
+      </div>
+    </div>
+
+    <!-- RESUME LIGHTBOX -->
+    <div id="resume-lightbox" class="resume-lightbox">
+      <div
+        class="resume-lightbox-backdrop"
+        onclick="closeResumeLightbox()"
+      ></div>
+      <div class="resume-lightbox-content">
+        <button
+          class="resume-lightbox-close"
+          onclick="closeResumeLightbox()"
+          aria-label="关闭"
+        >
+          ×
+        </button>
+        <h3 class="resume-lightbox-title">选择要下载的简历 ★</h3>
+        <div class="resume-download-list">
+          <a
+            class="resume-download-link"
+            href="https://pan.baidu.com/s/11CYJWjTHw_zLOzvvOi0Zcg"
+            target="_blank"
+            >简历 A</a
+          >
+          <a
+            class="resume-download-link"
+            href="https://pan.baidu.com/s/17Sx2yWRSr3xxK7Sy6UzQyg"
+            target="_blank"
+            >简历 B</a
+          >
+          <a
+            class="resume-download-link"
+            href="https://pan.baidu.com/s/1DI2_6L1atU1ZOadlIW5f4g"
+            target="_blank"
+            >简历 C</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <div id="qr-lightbox" class="qr-lightbox">
+      <div class="qr-lightbox-backdrop" onclick="closeQrLightbox()"></div>
+      <div class="qr-lightbox-content">
+        <button
+          class="qr-lightbox-close"
+          onclick="closeQrLightbox()"
+          aria-label="关闭"
+        >
+          ✕
+        </button>
+        <h3 class="qr-lightbox-title">我的微信 ★</h3>
+        <img src="images/QRCODE.jpg" alt="微信二维码" />
+      </div>
+    </div>
+
+    <div id="message-modal" class="message-modal">
+      <div class="message-modal-backdrop" onclick="closeMessageModal()"></div>
+      <div class="message-modal-content">
+        <button
+          class="message-modal-close"
+          onclick="closeMessageModal()"
+          aria-label="关闭"
+        >
+          ✕
+        </button>
+        <div class="message-modal-title">留个言吧</div>
+        <div class="message-modal-subtitle">
+          写点什么都好，我会认真看的(^_^)v
+        </div>
+        <form action="https://formsubmit.co/lynnlee0707@163.com" method="POST">
+          <div class="message-form-group">
+            <label for="msg-name">昵称</label>
+            <input
+              type="text"
+              id="msg-name"
+              name="name"
+              placeholder="怎么称呼你"
+              required
+            />
+          </div>
+          <div class="message-form-group">
+            <label for="msg-contact">联系方式</label>
+            <input
+              type="text"
+              id="msg-contact"
+              name="contact"
+              placeholder="邮箱 / 微信，方便我回复你（非必填）"
+            />
+          </div>
+          <div class="message-form-group">
+            <label for="msg-content">留言内容</label>
+            <textarea
+              id="msg-content"
+              name="message"
+              rows="4"
+              placeholder="想聊的项目、想法，或者只是想打个招呼……"
+              required
+            ></textarea>
+          </div>
+          <button type="submit" class="message-form-submit">发送 ✦</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="works-divider" class="star-divider">
+      <div class="spin-dot d-c"></div>
+      <span class="spin-star s3">★</span>
+      <div class="spin-dot d-w"></div>
+      <span class="spin-star s1">✦</span>
+      <div class="spin-dot d-y"></div>
+      <span class="spin-star s6">★</span>
+      <div class="spin-dot d-c"></div>
+      <span class="spin-star s2">✦</span>
+      <div class="spin-dot d-w"></div>
+      <span class="spin-star s9">★</span>
+      <div class="spin-dot d-y"></div>
+      <span class="spin-star s4">✦</span>
+      <div class="spin-dot d-c"></div>
+      <span class="spin-star s7">★</span>
+      <div class="spin-dot d-w"></div>
+      <span class="spin-star s5">✦</span>
+      <div class="spin-dot d-y"></div>
+      <span class="spin-star s8">★</span>
+      <div class="spin-dot d-c"></div>
+    </div>
+
+    <div id="works" class="section">
+      <div class="section-header pop">
+        <div class="sec-icon">✦</div>
+        <div class="section-title">作品集</div>
+      </div>
+      <div class="folders-grid pop-group">
+        <div
+          class="folder-puffy pop"
+          onclick="location.href = 'tools.html'"
+          role="link"
+          tabindex="0"
+        >
+          <div class="puffy-tab" style="background: #f5e642"></div>
+          <div class="puffy-body" style="background: #fffbe8">
+            <div class="puffy-pin" style="background: #f5e642"></div>
+            <div class="puffy-cat">工具</div>
+            <div class="puffy-name">我的工具箱</div>
+            <div class="puffy-desc">记录自己开发、搭建的小工具</div>
+            <div class="puffy-footer">
+              <svg width="40" height="40" viewBox="0 0 52 52" fill="none">
+                <rect
+                  x="6"
+                  y="8"
+                  width="40"
+                  height="36"
+                  rx="9"
+                  stroke="#1a1a1a"
+                  stroke-width="4"
+                  fill="none"
+                />
+                <path
+                  d="M16 21 L24 26 L16 31"
+                  stroke="#1a1a1a"
+                  stroke-width="4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  fill="none"
+                />
+                <path
+                  d="M28 33 L36 33"
+                  stroke="#1a1a1a"
+                  stroke-width="4"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <span class="puffy-view">查看 →</span>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="folder-puffy pop"
+          onclick="location.href = 'writings.html'"
+          role="link"
+          tabindex="0"
+        >
+          <div class="puffy-tab" style="background: #d72660"></div>
+          <div class="puffy-body" style="background: #fff0f7">
+            <div class="puffy-pin" style="background: #d72660"></div>
+            <div class="puffy-cat">文字作品</div>
+            <div class="puffy-name">我的创作</div>
+            <div class="puffy-desc">
+              文字作品和网页作品，记录我的观察和探索、研究和思考
+            </div>
+            <div class="puffy-footer">
+              <svg width="40" height="40" viewBox="0 0 52 52" fill="none">
+                <path
+                  d="M12 18 L14 38 Q15 42 19 42 L33 42 Q37 42 38 38 L40 18 Z"
+                  stroke="#1a1a1a"
+                  stroke-width="4"
+                  fill="none"
+                  stroke-linejoin="round"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M40 22 Q48 22 48 29 Q48 36 40 36"
+                  stroke="#1a1a1a"
+                  stroke-width="4"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M19 12 Q22 8 19 4 M26 12 Q29 8 26 4 M33 12 Q36 8 33 4"
+                  stroke="#1a1a1a"
+                  stroke-width="2.5"
+                  fill="none"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <span class="puffy-view">查看 →</span>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="folder-puffy pop"
+          onclick="location.href = 'photography.html'"
+          role="link"
+          tabindex="0"
+        >
+          <div class="puffy-tab" style="background: #aaee00"></div>
+          <div class="puffy-body" style="background: #f4ffe0">
+            <div class="puffy-pin" style="background: #aaee00"></div>
+            <div class="puffy-cat">摄影</div>
+            <div class="puffy-name">我的旅程</div>
+            <div class="puffy-desc">记录看过的风景</div>
+            <div class="puffy-footer">
+              <svg width="40" height="40" viewBox="0 0 52 52" fill="none">
+                <path
+                  d="M17 14 L20 9 Q21 7 24 7 L28 7 Q31 7 32 9 L35 14 L42 14 Q46 14 46 18 L46 38 Q46 42 42 42 L10 42 Q6 42 6 38 L6 18 Q6 14 10 14 Z"
+                  stroke="#1a1a1a"
+                  stroke-width="4"
+                  fill="none"
+                  stroke-linejoin="round"
+                  stroke-linecap="round"
+                />
+                <circle
+                  cx="26"
+                  cy="27"
+                  r="9"
+                  stroke="#1a1a1a"
+                  stroke-width="4"
+                  fill="none"
+                />
+                <circle cx="26" cy="27" r="3.5" fill="#1a1a1a" />
+              </svg>
+              <span class="puffy-view">查看 →</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="star-divider">
+      <div class="spin-dot d-y"></div>
+      <span class="spin-star s6">★</span>
+      <div class="spin-dot d-c"></div>
+      <span class="spin-star s3">✦</span>
+      <div class="spin-dot d-w"></div>
+      <span class="spin-star s9">★</span>
+      <div class="spin-dot d-y"></div>
+      <span class="spin-star s1">✦</span>
+      <div class="spin-dot d-c"></div>
+      <span class="spin-star s5">★</span>
+      <div class="spin-dot d-w"></div>
+      <span class="spin-star s7">✦</span>
+      <div class="spin-dot d-y"></div>
+      <span class="spin-star s2">★</span>
+      <div class="spin-dot d-c"></div>
+      <span class="spin-star s8">✦</span>
+      <div class="spin-dot d-w"></div>
+      <span class="spin-star s4">★</span>
+      <div class="spin-dot d-y"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-header pop">
+        <div class="sec-icon">♥</div>
+        <div class="section-title">我喜欢的作品</div>
+      </div>
+      <div class="favorites-grid pop-group">
+        <div class="favorite-card pop">
+          <svg
+            class="favorite-card-bg"
+            viewBox="0 0 140 160"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M8,12 C5,8 12,3 20,4 C45,1 90,2 120,5 C132,6 136,10 135,18 C137,50 136,100 134,140 C133,150 128,155 118,154 C85,157 40,156 15,153 C6,152 3,147 4,138 C2,100 3,50 8,12 Z"
+              fill="var(--cream)"
+              stroke="#000"
+              stroke-width="2.8"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <svg class="favorite-tape" viewBox="0 0 60 24">
+            <path
+              d="M3,8 C2,4 8,1 15,2 C28,0 42,1 52,3 C58,4 59,8 58,12 C59,16 58,20 52,21 C40,23 25,22 12,21 C6,20 2,18 3,14 C2,12 2,10 3,8 Z"
+              fill="#3dc7c1"
+              stroke="#000"
+              stroke-width="2.2"
+              stroke-linejoin="round"
+              opacity="0.95"
+            />
+          </svg>
+          <div class="favorite-card-inner">
+            <svg class="favorite-icon" viewBox="0 0 24 24">
+              <rect x="2" y="3" width="20" height="18" rx="2" />
+              <path d="M7 3v18M17 3v18M2 9h5M2 15h5M17 9h5M17 15h5" />
+            </svg>
+            <div class="favorite-title">电影</div>
+          </div>
+        </div>
+
+        <div class="favorite-card pop">
+          <svg
+            class="favorite-card-bg"
+            viewBox="0 0 140 160"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M6,10 C4,5 10,2 18,3 C48,0 88,3 122,6 C133,7 137,12 135,20 C138,55 135,95 133,138 C132,149 126,153 116,152 C82,156 42,154 13,150 C5,149 2,144 3,135 C1,98 4,52 6,10 Z"
+              fill="var(--cream)"
+              stroke="#000"
+              stroke-width="2.8"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <svg class="favorite-tape" viewBox="0 0 58 22">
+            <path
+              d="M3,7 C2,3 9,1 16,2 C27,0 40,1 50,3 C56,4 57,7 56,11 C57,15 56,18 50,19 C38,21 24,20 11,19 C5,18 2,16 3,12 C2,10 2,9 3,7 Z"
+              fill="#ff5c3e"
+              stroke="#000"
+              stroke-width="2.2"
+              stroke-linejoin="round"
+              opacity="0.95"
+            />
+          </svg>
+          <div class="favorite-card-inner">
+            <svg class="favorite-icon" viewBox="0 0 24 24">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+              <path
+                d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15Z"
+              />
+            </svg>
+            <div class="favorite-title">书籍</div>
+          </div>
+        </div>
+
+        <div class="favorite-card pop">
+          <svg
+            class="favorite-card-bg"
+            viewBox="0 0 140 160"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M9,14 C6,9 13,4 21,5 C50,2 85,4 119,7 C130,8 134,13 133,21 C136,52 134,98 132,141 C131,151 125,155 115,154 C84,157 44,155 16,152 C8,151 4,146 5,137 C3,102 4,54 9,14 Z"
+              fill="var(--cream)"
+              stroke="#000"
+              stroke-width="2.8"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <svg class="favorite-tape" viewBox="0 0 60 23">
+            <path
+              d="M3,8 C2,4 8,1 15,2 C28,0 42,1 52,3 C58,4 59,8 58,12 C59,15 58,19 52,20 C40,22 25,21 12,20 C6,19 2,17 3,13 C2,11 2,10 3,8 Z"
+              fill="#c9a8ff"
+              stroke="#000"
+              stroke-width="2.2"
+              stroke-linejoin="round"
+              opacity="0.95"
+            />
+          </svg>
+          <div class="favorite-card-inner">
+            <svg class="favorite-icon" viewBox="0 0 24 24">
+              <path d="M9 18V5l12-2v13" />
+              <circle cx="6" cy="18" r="3" />
+              <circle cx="18" cy="16" r="3" />
+            </svg>
+            <div class="favorite-title">音乐</div>
+          </div>
+        </div>
+
+        <div class="favorite-card pop">
+          <svg
+            class="favorite-card-bg"
+            viewBox="0 0 140 160"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M7,11 C5,6 11,3 19,4 C47,1 87,3 121,6 C132,7 136,11 134,19 C137,53 134,97 132,139 C131,150 125,154 115,153 C83,157 43,155 14,151 C6,150 3,145 4,136 C2,99 5,53 7,11 Z"
+              fill="var(--cream)"
+              stroke="#000"
+              stroke-width="2.8"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <svg class="favorite-tape" viewBox="0 0 60 21">
+            <path
+              d="M3,7 C2,3 9,1 16,2 C29,0 43,1 53,3 C59,4 60,7 59,11 C60,14 59,18 53,19 C41,21 26,20 13,19 C7,18 3,16 4,12 C3,10 3,9 3,7 Z"
+              fill="#aaee00"
+              stroke="#000"
+              stroke-width="2.2"
+              stroke-linejoin="round"
+              opacity="0.95"
+            />
+          </svg>
+          <div class="favorite-card-inner">
+            <svg class="favorite-icon" viewBox="0 0 24 24">
+              <line x1="6" y1="12" x2="10" y2="12" />
+              <line x1="8" y1="10" x2="8" y2="14" />
+              <line x1="15" y1="13" x2="15.01" y2="13" />
+              <line x1="18" y1="11" x2="18.01" y2="11" />
+              <rect x="2" y="6" width="20" height="12" rx="6" />
+            </svg>
+            <div class="favorite-title">游戏</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="contact-divider" class="star-divider">
+      <div class="spin-dot d-w"></div>
+      <span class="spin-star s5">★</span>
+      <div class="spin-dot d-y"></div>
+      <span class="spin-star s8">✦</span>
+      <div class="spin-dot d-c"></div>
+      <span class="spin-star s2">★</span>
+      <div class="spin-dot d-w"></div>
+      <span class="spin-star s7">✦</span>
+      <div class="spin-dot d-y"></div>
+      <span class="spin-star s4">★</span>
+      <div class="spin-dot d-c"></div>
+      <span class="spin-star s1">✦</span>
+      <div class="spin-dot d-w"></div>
+      <span class="spin-star s6">★</span>
+      <div class="spin-dot d-y"></div>
+      <span class="spin-star s3">✦</span>
+      <div class="spin-dot d-c"></div>
+      <span class="spin-star s9">★</span>
+      <div class="spin-dot d-w"></div>
+    </div>
+
+    <div id="contact" class="section">
+      <div class="section-header pop">
+        <div class="sec-icon sec-icon--contact">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+            />
+            <polyline points="22,6 12,13 2,6" />
+          </svg>
+        </div>
+        <div class="section-title">打个招呼！</div>
+      </div>
+      <div class="contact-card pop">
+        <h2>一起做点有价值的事吧！</h2>
+        <p>
+          欢迎和我交流！如果你对相同的方向感兴趣，或者有想法想要落地，或者只是想认识一下
+          :）
+        </p>
+        <button class="btn-crimson" onclick="openMessageModal()">
+          ✦ 留言 ✦
+        </button>
+        <div class="contact-links-grid" style="margin-top: 1.25rem">
+          <div class="contact-link">
+            邮箱：lynnlee0707@163.com <span></span>
+          </div>
+          <div class="contact-link" onclick="openQrLightbox()">
+            微信：lynnnleeeee <span>→</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="pop">
+      <span style="margin: 0 8px">★</span>
+      Made with ♥ · © YINGLIN
+      <span style="margin: 0 8px">✦</span>
+    </footer>
+
+    <script>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+            } else {
+              entry.target.classList.remove("visible");
+            }
+          });
+        },
+        { threshold: 0.15 },
+      );
+
+      document.querySelectorAll(".pop").forEach((el) => observer.observe(el));
+
+      // 00 SPACE 描边动效
+      const LETTER_DELAY_STEP = 0.32;
+      const DRAW_DURATION = 1.8;
+      const FILL_START_OFFSET = 1.1;
+
+      function setupAndPlayTitleAnimation() {
+        const svgs = document.querySelectorAll(".hero-title-svg");
+        if (!svgs.length) return;
+        let globalIndex = 0;
+
+        svgs.forEach((svg) => {
+          const letters = svg.querySelectorAll(".title-letter");
+          const shadowGroups = svg.querySelectorAll(".title-shadow-group");
+
+          letters.forEach((el) => {
+            const pathLength = el.getTotalLength ? el.getTotalLength() : 1200;
+            el.style.strokeDasharray = pathLength;
+            el.style.strokeDashoffset = pathLength;
+
+            const drawDelay = globalIndex * LETTER_DELAY_STEP;
+            const fillDelay =
+              globalIndex * LETTER_DELAY_STEP + FILL_START_OFFSET;
+            const hideDelay =
+              globalIndex * LETTER_DELAY_STEP + FILL_START_OFFSET + 0.7;
+            el.style.animationDelay =
+              drawDelay + "s, " + fillDelay + "s, " + hideDelay + "s";
+            el.classList.add("is-ready");
+            globalIndex++;
+          });
+
+          shadowGroups.forEach((group) => {
+            const letterIndex = parseInt(group.dataset.shadowFor, 10);
+            const fillDelay =
+              letterIndex * LETTER_DELAY_STEP + FILL_START_OFFSET;
+            group.querySelectorAll(".title-shadow").forEach((el) => {
+              el.style.animationDelay = fillDelay + "s";
+            });
+          });
+
+          svg.classList.add("is-playing");
+        });
+
+        const heroTitle = document.getElementById("heroTitle");
+        if (heroTitle) {
+          setTimeout(() => {
+            heroTitle.classList.add("is-floating");
+          }, 4200);
+        }
+      }
+
+      function setupAndPlaySubtitleAnimation() {
+        const sub = document.querySelector(".hero-sub");
+        if (!sub) return;
+        const text = sub.textContent.trim();
+        sub.innerHTML = "";
+        const words = text.split(/\s+/);
+        words.forEach((word, i) => {
+          const span = document.createElement("span");
+          span.className = "hero-sub-word";
+          span.textContent = word;
+          // 主标题接近完成时（约 3.5s）就开始连续逐词出现
+          span.style.animationDelay = 3.5 + i * 0.12 + "s";
+          sub.appendChild(span);
+          if (i < words.length - 1) {
+            sub.appendChild(document.createTextNode(" "));
+          }
+        });
+        sub.classList.add("playing");
+      }
+
+      function showHeroBadge() {
+        const badge = document.querySelector(".hero-badge");
+        if (badge) badge.classList.add("show");
+      }
+
+      window.addEventListener("load", () => {
+        // 等待字体真正加载完成后再播放描边动效，
+        // 否则 display=swap 会先使用系统字体渲染，
+        // 动效播完后才悄悄换成 Lilita One，导致描边路径与新字形错位。
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(() => {
+            setupAndPlayTitleAnimation();
+            setupAndPlaySubtitleAnimation();
+            // 副标题约在 5.0s 完成，之后顶部徽章掉落回弹出现
+            setTimeout(showHeroBadge, 5000);
+          });
+        } else {
+          setupAndPlayTitleAnimation();
+          setupAndPlaySubtitleAnimation();
+          setTimeout(showHeroBadge, 5000);
+        }
+      });
+
+      function openResumeLightbox() {
+        const lb = document.getElementById("resume-lightbox");
+        if (lb) lb.classList.add("active");
+      }
+
+      function closeResumeLightbox() {
+        const lb = document.getElementById("resume-lightbox");
+        if (lb) lb.classList.remove("active");
+      }
+
+      function openQrLightbox() {
+        const lb = document.getElementById("qr-lightbox");
+        if (lb) lb.classList.add("active");
+      }
+      function closeQrLightbox() {
+        const lb = document.getElementById("qr-lightbox");
+        if (lb) lb.classList.remove("active");
+      }
+
+      function openMessageModal() {
+        const modal = document.getElementById("message-modal");
+        if (modal) modal.classList.add("active");
+      }
+      function closeMessageModal() {
+        const modal = document.getElementById("message-modal");
+        if (modal) modal.classList.remove("active");
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeResumeLightbox();
+          closeQrLightbox();
+          closeMessageModal();
+        }
+      });
+
+      // 根据导航栏实际高度动态设置 scroll-margin-top，
+      // 使锚点滚动时板块标题刚好贴在导航栏下方，避免星星条与导航栏出现双黑条。
+      function updateNavHeight() {
+        const nav = document.querySelector("nav");
+        if (nav) {
+          document.documentElement.style.setProperty(
+            "--nav-height",
+            nav.offsetHeight + "px",
+          );
+        }
+      }
+      updateNavHeight();
+      window.addEventListener("resize", updateNavHeight);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1023 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>我的旅程 | 摄影</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@400;700;900&family=Oswald:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --green: #1a9e3f;
+        --green-dark: #0f7a2e;
+        --green-light: #d4f5dc;
+        --yellow: #f5e642;
+        --crimson: #d72660;
+        --cream: #fffbe8;
+        --ink: #1a1a1a;
+        --serif: "Noto Serif SC", serif;
+        --sans: "Noto Sans SC", sans-serif;
+        --display: "Oswald", sans-serif;
+      }
+
+      body {
+        font-family: var(--sans);
+        background: var(--green);
+        color: var(--ink);
+        margin: 0;
+        overflow-x: hidden;
+      }
+
+      /* SCROLL POP */
+      .pop,
+      .pop-once {
+        opacity: 0;
+        transform: translateY(40px) scale(0.92);
+        transition: none;
+      }
+      .pop.visible,
+      .pop-once.visible {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        transition:
+          opacity 0.85s cubic-bezier(0.34, 1.56, 0.64, 1),
+          transform 0.85s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      /* NAV */
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+        background: var(--green-dark);
+        border-bottom: 3px solid #000;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .nav-logo {
+        font-family: var(--serif);
+        font-weight: 900;
+        font-size: 1.1rem;
+        color: var(--yellow);
+        text-decoration: none;
+        text-shadow: 2px 2px 0 #000;
+        letter-spacing: 0.04em;
+      }
+      .nav-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0.5rem 1rem;
+        background: var(--cream);
+        border: 2px solid #000;
+        border-radius: 999px;
+        font-family: var(--sans);
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--ink);
+        text-decoration: none;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      .nav-back:hover {
+        transform: translateY(-2px);
+        background: var(--yellow);
+      }
+
+      /* HERO */
+      .sub-hero {
+        padding: 2.5rem 2rem 1.5rem;
+        text-align: center;
+      }
+      .sub-hero h1 {
+        font-family: var(--serif);
+        font-weight: 900;
+        font-size: clamp(36px, 8vw, 64px);
+        color: var(--yellow);
+        text-shadow: 3px 3px 0 #000;
+        line-height: 1.1;
+        margin-bottom: 0.5rem;
+        letter-spacing: 0.04em;
+      }
+      .sub-hero p {
+        font-family: var(--sans);
+        font-size: 14px;
+        font-weight: 700;
+        color: #fff;
+        text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
+        letter-spacing: 0.06em;
+      }
+
+      /* PHOTO SECTION */
+      .photo-section {
+        padding: 3rem 0 7rem;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 1.5rem;
+      }
+      .section-title {
+        font-family: var(--serif);
+        font-weight: 900;
+        font-size: 26px;
+        color: var(--yellow);
+        text-shadow: 2px 2px 0 #000;
+        letter-spacing: 0.06em;
+      }
+      .sec-icon {
+        background: var(--crimson);
+        color: #fff;
+        border: 2px solid #000;
+        border-radius: 8px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        box-shadow: 2px 2px 0 #000;
+      }
+
+      /* COVERFLOW CAROUSEL */
+      .coverflow {
+        position: relative;
+        width: 100%;
+        perspective: 1200px;
+        user-select: none;
+      }
+      .coverflow-viewport {
+        position: relative;
+        height: 460px;
+        overflow: hidden;
+        touch-action: pan-y;
+        cursor: grab;
+      }
+      .coverflow-viewport:active {
+        cursor: grabbing;
+      }
+      .coverflow-track {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+      }
+      .coverflow-slide {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 560px;
+        max-width: 68vw;
+        aspect-ratio: 4 / 3;
+        margin-left: -280px;
+        margin-top: -210px;
+        transition:
+          transform 0.55s cubic-bezier(0.34, 1.15, 0.64, 1),
+          opacity 0.45s ease,
+          filter 0.45s ease,
+          z-index 0s linear 0.55s;
+        cursor: pointer;
+        transform-style: preserve-3d;
+        will-change: transform, opacity;
+      }
+      .coverflow-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        pointer-events: none;
+      }
+      .coverflow-slide.active {
+        z-index: 50;
+        opacity: 1;
+        filter: brightness(1);
+        transform: translateX(0) translateZ(220px) rotateY(0deg) scale(1);
+      }
+      .coverflow-slide.side-left-1 {
+        z-index: 40;
+        opacity: 0.85;
+        filter: brightness(0.92);
+        transform: translateX(-62%) translateZ(-100px) rotateY(48deg) scale(0.74);
+      }
+      .coverflow-slide.side-right-1 {
+        z-index: 40;
+        opacity: 0.85;
+        filter: brightness(0.92);
+        transform: translateX(62%) translateZ(-100px) rotateY(-48deg) scale(0.74);
+      }
+      .coverflow-slide.side-left-2 {
+        z-index: 30;
+        opacity: 0.5;
+        filter: brightness(0.82);
+        transform: translateX(-104%) translateZ(-260px) rotateY(56deg) scale(0.52);
+      }
+      .coverflow-slide.side-right-2 {
+        z-index: 30;
+        opacity: 0.5;
+        filter: brightness(0.82);
+        transform: translateX(104%) translateZ(-260px) rotateY(-56deg) scale(0.52);
+      }
+      .coverflow-slide.side-left-3,
+      .coverflow-slide.side-right-3,
+      .coverflow-slide.side-left-4,
+      .coverflow-slide.side-right-4,
+      .coverflow-slide.side-left-5,
+      .coverflow-slide.side-right-5 {
+        z-index: 20;
+        opacity: 0.18;
+        filter: brightness(0.7);
+      }
+      .coverflow-slide.side-left-3 {
+        transform: translateX(-138%) translateZ(-380px) rotateY(62deg) scale(0.38);
+      }
+      .coverflow-slide.side-right-3 {
+        transform: translateX(138%) translateZ(-380px) rotateY(-62deg) scale(0.38);
+      }
+      .coverflow-slide.side-left-4 {
+        transform: translateX(-166%) translateZ(-460px) rotateY(66deg) scale(0.3);
+      }
+      .coverflow-slide.side-right-4 {
+        transform: translateX(166%) translateZ(-460px) rotateY(-66deg) scale(0.3);
+      }
+      .coverflow-slide.side-left-5 {
+        transform: translateX(-188%) translateZ(-520px) rotateY(70deg) scale(0.24);
+      }
+      .coverflow-slide.side-right-5 {
+        transform: translateX(188%) translateZ(-520px) rotateY(-70deg) scale(0.24);
+      }
+
+      /* COVERFLOW V2 — reference-based inline-transform approach (test on 海边) */
+      .coverflow-v2 .coverflow-viewport {
+        perspective: 1400px;
+        perspective-origin: 50% 50%;
+        cursor: grab;
+      }
+      .coverflow-v2 .coverflow-viewport.dragging {
+        cursor: grabbing;
+      }
+      .coverflow-v2 .coverflow-slide {
+        width: 320px;
+        max-width: 42vw;
+        aspect-ratio: 4 / 3;
+        margin-left: -160px;
+        margin-top: -120px;
+        overflow: hidden;
+        transition:
+          transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1),
+          opacity 0.5s ease,
+          z-index 0s linear 0.65s;
+      }
+      .coverflow-v2 .coverflow-slide.is-active {
+        cursor: default;
+      }
+      .coverflow-v2 .coverflow-slide img {
+        object-fit: contain;
+      }
+
+      @media (max-width: 720px) {
+        .coverflow-v2 .coverflow-slide {
+          width: 220px;
+          max-width: 55vw;
+          margin-left: -110px;
+          margin-top: -82.5px;
+        }
+      }
+
+      .coverflow-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 80;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 3px solid #000;
+        background: var(--cream);
+        color: var(--ink);
+        font-size: 26px;
+        font-weight: 900;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 4px 4px 0 #000;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      .coverflow-arrow:hover {
+        transform: translateY(-50%) scale(1.08);
+        box-shadow: 6px 7px 0 #000;
+      }
+      .coverflow-arrow:active {
+        transform: translateY(-50%) scale(0.96);
+      }
+      .coverflow-prev {
+        left: 16px;
+      }
+      .coverflow-next {
+        right: 16px;
+      }
+
+      /* STAR DIVIDER */
+      .star-divider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px 20px;
+        border-top: 3px solid #000;
+        border-bottom: 3px solid #000;
+        background: var(--green-dark);
+        overflow: hidden;
+        flex-wrap: wrap;
+      }
+      .spin-star {
+        font-family: var(--serif);
+        color: var(--yellow);
+        text-shadow: 2px 2px 0 #000;
+        display: inline-block;
+        line-height: 1;
+      }
+      .spin-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        border: 2px solid #000;
+        flex-shrink: 0;
+        box-shadow: 1px 1px 0 #000;
+      }
+      .s1 { font-size: 28px; animation: spin 4s linear infinite; }
+      .s2 { font-size: 18px; animation: spin 3s linear infinite reverse; color: #fff; text-shadow: 1px 1px 0 #000; }
+      .s3 { font-size: 34px; animation: spin 5s linear infinite; }
+      .s4 { font-size: 16px; animation: spin 2.5s linear infinite reverse; color: var(--cream); text-shadow: 1px 1px 0 #000; }
+      .s5 { font-size: 24px; animation: spin 3.5s linear infinite; }
+      .s6 { font-size: 20px; animation: spin 4.5s linear infinite reverse; color: #fff; text-shadow: 1px 1px 0 #000; }
+      .s7 { font-size: 30px; animation: spin 3.8s linear infinite; }
+      .s8 { font-size: 14px; animation: spin 2.8s linear infinite reverse; color: var(--cream); }
+      .s9 { font-size: 26px; animation: spin 4.2s linear infinite; }
+      .d-y { background: var(--yellow); }
+      .d-c { background: var(--crimson); }
+      .d-w { background: #fff; }
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      /* PHOTO LIGHTBOX (matches tools.html style) */
+      .photo-lightbox {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      }
+      .photo-lightbox.active {
+        display: flex;
+      }
+      .photo-lightbox-backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(4px);
+      }
+      .photo-lightbox-content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 90vw;
+        max-width: 1100px;
+        max-height: 90vh;
+        padding: 20px;
+        background: var(--green);
+        border: 3px solid #000;
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+        z-index: 1;
+      }
+      .photo-lightbox-content img {
+        max-width: 100%;
+        max-height: 70vh;
+        height: auto;
+        object-fit: contain;
+        border-radius: 8px;
+        display: block;
+      }
+      .photo-lightbox-close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 40px;
+        height: 40px;
+        border: 3px solid #000;
+        border-radius: 50%;
+        background: var(--cream);
+        color: var(--ink);
+        font-size: 22px;
+        font-weight: 900;
+        cursor: pointer;
+        box-shadow: 3px 3px 0 #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+        transition: all 0.1s;
+      }
+      .photo-lightbox-close:hover {
+        background: var(--yellow);
+        transform: translate(1px, 1px);
+      }
+      .photo-lightbox-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 44px;
+        height: 44px;
+        border: 3px solid #000;
+        border-radius: 50%;
+        background: var(--cream);
+        color: var(--ink);
+        font-size: 24px;
+        font-weight: 900;
+        cursor: pointer;
+        box-shadow: 3px 3px 0 #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+        transition: all 0.1s;
+      }
+      .photo-lightbox-nav:hover {
+        background: var(--crimson);
+        color: #fff;
+      }
+      .photo-lightbox-prev { left: 12px; }
+      .photo-lightbox-next { right: 12px; }
+      @media (max-width: 720px) {
+        .photo-lightbox-content {
+          padding: 14px;
+          width: 94vw;
+        }
+        .photo-lightbox-content img {
+          max-height: 60vh;
+        }
+        .photo-lightbox-close {
+          width: 36px;
+          height: 36px;
+          font-size: 18px;
+        }
+        .photo-lightbox-nav {
+          width: 38px;
+          height: 38px;
+          font-size: 20px;
+        }
+        .photo-lightbox-prev { left: 8px; }
+        .photo-lightbox-next { right: 8px; }
+      }
+
+      /* FOOTER */
+      footer {
+        text-align: center;
+        padding: 1.5rem;
+        font-family: var(--serif);
+        font-weight: 700;
+        font-size: 15px;
+        color: var(--yellow);
+        text-shadow: 1px 1px 0 #000;
+        letter-spacing: 0.08em;
+        border-top: 3px solid #000;
+        background: var(--green-dark);
+      }
+
+      @media (max-width: 720px) {
+        .coverflow-viewport {
+          height: 340px;
+        }
+        .coverflow-slide {
+          width: 78vw;
+          margin-left: -39vw;
+          margin-top: -29.25vw;
+        }
+        .coverflow-arrow {
+          width: 40px;
+          height: 40px;
+          font-size: 22px;
+        }
+        .coverflow-prev { left: 8px; }
+        .coverflow-next { right: 8px; }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="portfolio_chinese0504.html" class="nav-logo">✦ YINGLIN</a>
+      <a
+        href="portfolio_chinese0504.html"
+        class="nav-back"
+        onclick="if (history.length > 1) { event.preventDefault(); history.back(); }"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        返回首页
+      </a>
+    </nav>
+
+    <div class="sub-hero">
+      <h1 class="pop-once">我的旅程</h1>
+      <p class="pop-once">PHOTO JOURNEY</p>
+    </div>
+
+    <div class="star-divider">
+      <div class="spin-dot d-y"></div>
+      <span class="spin-star s1">★</span>
+      <div class="spin-dot d-c"></div>
+      <span class="spin-star s2">✦</span>
+      <div class="spin-dot d-w"></div>
+      <span class="spin-star s3">★</span>
+      <div class="spin-dot d-y"></div>
+      <span class="spin-star s4">✦</span>
+      <div class="spin-dot d-c"></div>
+      <span class="spin-star s5">★</span>
+      <div class="spin-dot d-w"></div>
+      <span class="spin-star s6">✦</span>
+      <div class="spin-dot d-y"></div>
+      <span class="spin-star s7">★</span>
+      <div class="spin-dot d-c"></div>
+      <span class="spin-star s8">✦</span>
+      <div class="spin-dot d-w"></div>
+      <span class="spin-star s9">★</span>
+      <div class="spin-dot d-y"></div>
+    </div>
+
+    <!-- 海边 -->
+    <section class="photo-section">
+      <div class="section-header pop-once">
+        <div class="sec-icon">✦</div>
+        <div class="section-title">BY THE SEA</div>
+      </div>
+      <div class="coverflow coverflow-v2 pop" data-module="sea">
+        <button class="coverflow-arrow coverflow-prev" aria-label="上一张">‹</button>
+        <div class="coverflow-viewport">
+          <div class="coverflow-track">
+            <div class="coverflow-slide" data-index="0">
+              <img src="images/photography/sea/1.jpg" alt="BY THE SEA 01" />
+            </div>
+            <div class="coverflow-slide" data-index="1">
+              <img src="images/photography/sea/2.jpg" alt="BY THE SEA 02" />
+            </div>
+            <div class="coverflow-slide" data-index="2">
+              <img src="images/photography/sea/3.jpg" alt="BY THE SEA 03" />
+            </div>
+            <div class="coverflow-slide" data-index="3">
+              <img src="images/photography/sea/4.JPG" alt="BY THE SEA 04" />
+            </div>
+            <div class="coverflow-slide" data-index="4">
+              <img src="images/photography/sea/5.JPG" alt="BY THE SEA 05" />
+            </div>
+            <div class="coverflow-slide" data-index="5">
+              <img src="images/photography/sea/6.JPG" alt="BY THE SEA 06" />
+            </div>
+            <div class="coverflow-slide" data-index="6">
+              <img src="images/photography/sea/7.JPG" alt="BY THE SEA 07" />
+            </div>
+            <div class="coverflow-slide" data-index="7">
+              <img src="images/photography/sea/8.JPG" alt="BY THE SEA 08" />
+            </div>
+            <div class="coverflow-slide" data-index="8">
+              <img src="images/photography/sea/9.JPG" alt="BY THE SEA 09" />
+            </div>
+            <div class="coverflow-slide" data-index="9">
+              <img src="images/photography/sea/10.JPG" alt="BY THE SEA 10" />
+            </div>
+            <div class="coverflow-slide" data-index="10">
+              <img src="images/photography/sea/11.JPG" alt="BY THE SEA 11" />
+            </div>
+            <div class="coverflow-slide" data-index="11">
+              <img src="images/photography/sea/12.JPG" alt="BY THE SEA 12" />
+            </div>
+            <div class="coverflow-slide" data-index="12">
+              <img src="images/photography/sea/13.JPG" alt="BY THE SEA 13" />
+            </div>
+          </div>
+        </div>
+        <button class="coverflow-arrow coverflow-next" aria-label="下一张">›</button>
+      </div>
+    </section>
+
+    <!-- 绿地 -->
+    <section class="photo-section">
+      <div class="section-header pop-once">
+        <div class="sec-icon">✦</div>
+        <div class="section-title">IN THE WOODS</div>
+      </div>
+      <div class="coverflow coverflow-v2 pop" data-module="grass">
+        <button class="coverflow-arrow coverflow-prev" aria-label="上一张">‹</button>
+        <div class="coverflow-viewport">
+          <div class="coverflow-track">
+            <div class="coverflow-slide" data-index="0">
+              <img src="images/photography/woods/1.PNG" alt="IN THE WOODS 01" />
+            </div>
+            <div class="coverflow-slide" data-index="1">
+              <img src="images/photography/woods/2.JPG" alt="IN THE WOODS 02" />
+            </div>
+            <div class="coverflow-slide" data-index="2">
+              <img src="images/photography/woods/3.JPG" alt="IN THE WOODS 03" />
+            </div>
+            <div class="coverflow-slide" data-index="3">
+              <img src="images/photography/woods/4.JPG" alt="IN THE WOODS 04" />
+            </div>
+            <div class="coverflow-slide" data-index="4">
+              <img src="images/photography/woods/5.JPG" alt="IN THE WOODS 05" />
+            </div>
+            <div class="coverflow-slide" data-index="5">
+              <img src="images/photography/woods/6.JPG" alt="IN THE WOODS 06" />
+            </div>
+            <div class="coverflow-slide" data-index="6">
+              <img src="images/photography/woods/7.JPG" alt="IN THE WOODS 07" />
+            </div>
+            <div class="coverflow-slide" data-index="7">
+              <img src="images/photography/woods/8.JPG" alt="IN THE WOODS 08" />
+            </div>
+            <div class="coverflow-slide" data-index="8">
+              <img src="images/photography/woods/9.JPG" alt="IN THE WOODS 09" />
+            </div>
+            <div class="coverflow-slide" data-index="9">
+              <img src="images/photography/woods/10.JPG" alt="IN THE WOODS 10" />
+            </div>
+            <div class="coverflow-slide" data-index="10">
+              <img src="images/photography/woods/11.JPG" alt="IN THE WOODS 11" />
+            </div>
+          </div>
+        </div>
+        <button class="coverflow-arrow coverflow-next" aria-label="下一张">›</button>
+      </div>
+    </section>
+
+    <div id="photoLightbox" class="photo-lightbox">
+      <div class="photo-lightbox-backdrop" onclick="closePhotoLightbox()"></div>
+      <div class="photo-lightbox-content">
+        <button class="photo-lightbox-close" onclick="closePhotoLightbox()" aria-label="关闭图片">✕</button>
+        <button class="photo-lightbox-nav photo-lightbox-prev" onclick="prevPhotoLightbox()" aria-label="上一张">‹</button>
+        <img id="photoLightboxImage" src="" alt="" />
+        <button class="photo-lightbox-nav photo-lightbox-next" onclick="nextPhotoLightbox()" aria-label="下一张">›</button>
+      </div>
+    </div>
+
+    <script>
+      // Scroll reveal
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+            } else {
+              entry.target.classList.remove("visible");
+            }
+          });
+        },
+        { threshold: 0.12 },
+      );
+      document.querySelectorAll(".pop").forEach((el) => observer.observe(el));
+
+      const onceObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              onceObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15 },
+      );
+      document.querySelectorAll(".pop-once").forEach((el) => onceObserver.observe(el));
+
+      // Coverflow logic
+      function initCoverflow(container) {
+        const track = container.querySelector(".coverflow-track");
+        const slides = Array.from(container.querySelectorAll(".coverflow-slide"));
+        const caption = container.querySelector(".coverflow-caption");
+        const prevBtn = container.querySelector(".coverflow-prev");
+        const nextBtn = container.querySelector(".coverflow-next");
+        const viewport = container.querySelector(".coverflow-viewport");
+        let activeIndex = 0;
+        const total = slides.length;
+
+        function update() {
+          slides.forEach((slide, i) => {
+            slide.className = "coverflow-slide";
+            // Circular offset so the carousel visually loops
+            let offset = i - activeIndex;
+            if (offset > total / 2) offset -= total;
+            if (offset < -total / 2) offset += total;
+
+            if (offset === 0) {
+              slide.classList.add("active");
+            } else if (offset < 0) {
+              slide.classList.add("side-left-" + Math.min(Math.abs(offset), 5));
+            } else {
+              slide.classList.add("side-right-" + Math.min(offset, 5));
+            }
+          });
+
+          const activeSlide = slides[activeIndex];
+          caption.textContent = activeSlide.querySelector("img").alt;
+        }
+
+        function goTo(index) {
+          activeIndex = (index + total) % total;
+          update();
+        }
+
+        prevBtn.addEventListener("click", () => goTo(activeIndex - 1));
+        nextBtn.addEventListener("click", () => goTo(activeIndex + 1));
+
+        // Click on left/right side of viewport to navigate
+        viewport.addEventListener("click", (e) => {
+          if (dragMoved) return;
+          const rect = viewport.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const center = rect.width / 2;
+          const deadZone = Math.min(80, rect.width * 0.15);
+          if (x < center - deadZone) goTo(activeIndex - 1);
+          else if (x > center + deadZone) goTo(activeIndex + 1);
+        });
+
+        // Keyboard navigation
+        container.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowLeft") goTo(activeIndex - 1);
+          if (e.key === "ArrowRight") goTo(activeIndex + 1);
+        });
+        container.setAttribute("tabindex", "0");
+
+        // Drag / swipe navigation (mouse, trackpad click-drag, touch)
+        let startX = 0;
+        let isDragging = false;
+        let dragMoved = false;
+
+        viewport.addEventListener("pointerdown", (e) => {
+          isDragging = true;
+          dragMoved = false;
+          startX = e.clientX;
+          viewport.setPointerCapture(e.pointerId);
+        });
+        viewport.addEventListener("pointermove", (e) => {
+          if (!isDragging) return;
+          if (Math.abs(e.clientX - startX) > 6) dragMoved = true;
+        });
+        viewport.addEventListener("pointerup", (e) => {
+          if (!isDragging) return;
+          isDragging = false;
+          const diff = e.clientX - startX;
+          if (diff < -40) goTo(activeIndex + 1);
+          else if (diff > 40) goTo(activeIndex - 1);
+        });
+        viewport.addEventListener("pointercancel", () => {
+          isDragging = false;
+          dragMoved = false;
+        });
+
+        // Trackpad horizontal scroll support
+        let wheelAccum = 0;
+        let wheelLocked = false;
+        const WHEEL_THRESHOLD = 50;
+        const WHEEL_COOLDOWN_MS = 550;
+
+        viewport.addEventListener(
+          "wheel",
+          (e) => {
+            // Only hijack clearly horizontal gestures; leave vertical page scroll untouched.
+            if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+            e.preventDefault();
+            if (wheelLocked) return;
+
+            wheelAccum += e.deltaX;
+            if (wheelAccum > WHEEL_THRESHOLD) {
+              goTo(activeIndex + 1);
+              wheelAccum = 0;
+              wheelLocked = true;
+              setTimeout(() => {
+                wheelLocked = false;
+              }, WHEEL_COOLDOWN_MS);
+            } else if (wheelAccum < -WHEEL_THRESHOLD) {
+              goTo(activeIndex - 1);
+              wheelAccum = 0;
+              wheelLocked = true;
+              setTimeout(() => {
+                wheelLocked = false;
+              }, WHEEL_COOLDOWN_MS);
+            }
+          },
+          { passive: false }
+        );
+
+        update();
+      }
+
+      // Coverflow v2: reference-based inline-transform approach
+      function initCoverflowV2(root) {
+        const viewport = root.querySelector(".coverflow-viewport");
+        const slides = Array.from(root.querySelectorAll(".coverflow-slide"));
+        const prevBtn = root.querySelector(".coverflow-prev");
+        const nextBtn = root.querySelector(".coverflow-next");
+        const count = slides.length;
+        let current = 0;
+
+        // Tuning knobs
+        const SPACING = 160;
+        const ROTATION = 50;
+        const SCALE_STEP = 0.16;
+        const DEPTH_STEP = 160;
+        const MAX_VISIBLE = 3;
+
+        function shortestOffset(index, currentIndex) {
+          let offset = index - currentIndex;
+          if (offset > count / 2) offset -= count;
+          if (offset < -count / 2) offset += count;
+          return offset;
+        }
+
+        function render() {
+          slides.forEach((slide, i) => {
+            const offset = shortestOffset(i, current);
+            const abs = Math.abs(offset);
+            const dir = Math.sign(offset);
+
+            const translateX = offset * SPACING;
+            const translateZ = -abs * DEPTH_STEP;
+            const rotateY = -dir * Math.min(abs, 1) * ROTATION;
+            const scale = Math.max(1 - abs * SCALE_STEP, 0.5);
+            const opacity = abs > MAX_VISIBLE ? 0 : 1 - abs * 0.22;
+            const zIndex = 100 - abs;
+
+            slide.style.transform =
+              "translateX(" + translateX + "px) " +
+              "translateZ(" + translateZ + "px) " +
+              "rotateY(" + rotateY + "deg) " +
+              "scale(" + scale + ")";
+            slide.style.opacity = opacity;
+            slide.style.zIndex = zIndex;
+            slide.style.pointerEvents = abs > MAX_VISIBLE ? "none" : "auto";
+            slide.classList.toggle("is-active", offset === 0);
+          });
+        }
+
+        function goTo(index) {
+          current = ((index % count) + count) % count;
+          render();
+        }
+
+        prevBtn.addEventListener("click", () => goTo(current - 1));
+        nextBtn.addEventListener("click", () => goTo(current + 1));
+
+        root.setAttribute("tabindex", "0");
+        root.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowLeft") goTo(current - 1);
+          if (e.key === "ArrowRight") goTo(current + 1);
+        });
+
+        let isDragging = false;
+        let startX = 0;
+        let hasMoved = false;
+        let tappedSlide = null;
+
+        viewport.addEventListener("pointerdown", (e) => {
+          isDragging = true;
+          hasMoved = false;
+          startX = e.clientX;
+          tappedSlide = e.target.closest(".coverflow-slide");
+          viewport.classList.add("dragging");
+          viewport.setPointerCapture(e.pointerId);
+        });
+        viewport.addEventListener("pointermove", (e) => {
+          if (!isDragging) return;
+          if (Math.abs(e.clientX - startX) > 8) hasMoved = true;
+        });
+        function endDrag(e) {
+          if (!isDragging) return;
+          isDragging = false;
+          viewport.classList.remove("dragging");
+          const dx = e.clientX - startX;
+          if (Math.abs(dx) > 50) {
+            // Drag: switch slide
+            if (dx > 50) goTo(current - 1);
+            else goTo(current + 1);
+          } else if (tappedSlide && !hasMoved) {
+            // Tap: open lightbox for the tapped slide
+            const index = slides.indexOf(tappedSlide);
+            if (index !== -1) openPhotoLightbox(slides, index);
+          }
+          tappedSlide = null;
+        }
+        viewport.addEventListener("pointerup", endDrag);
+        viewport.addEventListener("pointercancel", endDrag);
+
+        // Trackpad horizontal scroll support
+        let wheelAccum = 0;
+        let wheelLocked = false;
+        const WHEEL_THRESHOLD = 50;
+        const WHEEL_COOLDOWN_MS = 550;
+
+        viewport.addEventListener(
+          "wheel",
+          (e) => {
+            if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+            e.preventDefault();
+            if (wheelLocked) return;
+
+            wheelAccum += e.deltaX;
+            if (wheelAccum > WHEEL_THRESHOLD) {
+              goTo(current + 1);
+              wheelAccum = 0;
+              wheelLocked = true;
+              setTimeout(() => {
+                wheelLocked = false;
+              }, WHEEL_COOLDOWN_MS);
+            } else if (wheelAccum < -WHEEL_THRESHOLD) {
+              goTo(current - 1);
+              wheelAccum = 0;
+              wheelLocked = true;
+              setTimeout(() => {
+                wheelLocked = false;
+              }, WHEEL_COOLDOWN_MS);
+            }
+          },
+          { passive: false }
+        );
+
+        render();
+      }
+
+      // Photo lightbox
+      let currentPhotoLightboxImages = [];
+      let currentPhotoLightboxIndex = 0;
+
+      function openPhotoLightbox(slides, index) {
+        currentPhotoLightboxImages = slides.map((slide) => {
+          const img = slide.querySelector("img");
+          return { src: img.src, caption: img.alt };
+        });
+        currentPhotoLightboxIndex = index;
+        updatePhotoLightbox();
+        document.getElementById("photoLightbox").classList.add("active");
+      }
+
+      function closePhotoLightbox() {
+        document.getElementById("photoLightbox").classList.remove("active");
+      }
+
+      function updatePhotoLightbox() {
+        const img = document.getElementById("photoLightboxImage");
+        const item = currentPhotoLightboxImages[currentPhotoLightboxIndex];
+        img.src = item.src;
+        img.alt = item.caption;
+      }
+
+      function nextPhotoLightbox() {
+        currentPhotoLightboxIndex =
+          (currentPhotoLightboxIndex + 1) % currentPhotoLightboxImages.length;
+        updatePhotoLightbox();
+      }
+
+      function prevPhotoLightbox() {
+        currentPhotoLightboxIndex =
+          (currentPhotoLightboxIndex - 1 + currentPhotoLightboxImages.length) %
+          currentPhotoLightboxImages.length;
+        updatePhotoLightbox();
+      }
+
+      document.addEventListener("keydown", (e) => {
+        const lightbox = document.getElementById("photoLightbox");
+        if (e.key === "Escape" && lightbox.classList.contains("active")) {
+          closePhotoLightbox();
+        }
+        if (lightbox.classList.contains("active")) {
+          if (e.key === "ArrowRight") nextPhotoLightbox();
+          if (e.key === "ArrowLeft") prevPhotoLightbox();
+        }
+      });
+
+      document
+        .querySelectorAll(".coverflow:not(.coverflow-v2)")
+        .forEach(initCoverflow);
+      document
+        .querySelectorAll(".coverflow-v2")
+        .forEach(initCoverflowV2);
+    </script>
+  </body>
+</html>
