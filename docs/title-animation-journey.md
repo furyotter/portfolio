@@ -189,6 +189,6 @@ el.style.strokeDashoffset = pathLength;
 
 ## 七、相关文件
 
-- `portfolio_chinese0504.html`：标题 SVG、CSS 动画、JS 动画逻辑
+- `index.html`：标题 SVG、CSS 动画、JS 动画逻辑
 - 字体源：`https://fonts.googleapis.com/css2?family=Lilita+One`
 - 工具：`fontTools`（Python）用于提取字形轮廓

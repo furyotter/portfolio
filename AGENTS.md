@@ -363,7 +363,7 @@ box-shadow: 2px 2px 0 #000;  /* 或更小 */
 
 ## 7. 页面特有模式
 
-### 7.1 首页（portfolio_chinese0504.html）
+### 7.1 首页（index.html）
 
 - Hero 区全屏居中，大标题使用 SVG 字符动画。
 - 个人介绍使用 `.hero-card`。
