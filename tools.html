@@ -421,6 +421,9 @@
         transform: translate(2px, 2px);
         box-shadow: 1px 1px 0 #000;
       }
+      .tool-questions-grid--2col {
+        grid-template-columns: repeat(2, 1fr);
+      }
       .tool-questions-grid img {
         width: 100%;
         height: auto;
@@ -772,6 +775,9 @@
           order: -1;
         }
         .tool-questions-grid {
+          grid-template-columns: 1fr;
+        }
+        .tool-questions-grid--2col {
           grid-template-columns: 1fr;
         }
         .tool-example-block {
@@ -1411,6 +1417,115 @@
           </div>
         </div>
 
+        <!-- Tool 4 -->
+        <div class="tool-card tool-card--hero pop">
+          <div class="tool-hero-body">
+            <div class="tool-info">
+              <div class="tool-header">
+                <span class="tool-num">4</span>
+                <div class="tool-title">求职助手仪表盘</div>
+              </div>
+              <div class="tool-subtitle">记录求职信息 · 分析岗位优劣 · 简历定制自动化</div>
+              <div class="tool-desc">
+                一个记录求职信息的仪表盘，可以记录岗位信息、投递进度，并分析岗位优劣，以及实现简历定制修改自动化。核心解决求职过程中「岗位判断靠感觉、简历反复改」两大痛点。
+              </div>
+              <ul class="tool-features">
+                <li>
+                  <strong>岗位信息分析：</strong>
+                  一键分析岗位人才画像、业务内容、职业积累、岗位潜在风险，并生成薪资增长曲线，帮助求职者快速判断岗位优劣与长期价值
+                </li>
+                <li>
+                  <strong>定制修改简历：</strong>
+                  根据岗位 JD 一键定制修改简历，突出侧重点，无需再反复调整修改简历
+                </li>
+              </ul>
+              <a
+                href="https://job-hunting-assistant.base44.app"
+                class="tool-link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                访问
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </a>
+            </div>
+            <div class="tool-media-panel">
+              <div class="tool-media-tabs">
+                <button class="tool-media-tab active" data-tab="overview">
+                  仪表盘总览
+                </button>
+                <button class="tool-media-tab" data-tab="analysis">
+                  岗位分析
+                </button>
+                <button class="tool-media-tab" data-tab="resume">
+                  简历定制
+                </button>
+              </div>
+              <div class="tool-media-content">
+                <div class="tool-media-pane active" data-pane="overview">
+                  <figure
+                    class="tool-media-figure tool-media-figure--zoomable"
+                    onclick="openLightbox(jobDashboardLightboxImages, 0)"
+                  >
+                    <img
+                      src="images/job-dashboard/screenshot-0.png"
+                      alt="求职助手仪表盘总览"
+                    />
+                    <figcaption>仪表盘总览</figcaption>
+                  </figure>
+                </div>
+                <div class="tool-media-pane" data-pane="analysis">
+                  <div class="tool-questions-grid tool-questions-grid--2col">
+                    <figure
+                      class="tool-media-figure--zoomable"
+                      onclick="openLightbox(jobDashboardLightboxImages, 1)"
+                    >
+                      <img
+                        src="images/job-dashboard/screenshot-1.png"
+                        alt="岗位信息分析示例 1"
+                      />
+                      <figcaption>岗位分析一</figcaption>
+                    </figure>
+                    <figure
+                      class="tool-media-figure--zoomable"
+                      onclick="openLightbox(jobDashboardLightboxImages, 2)"
+                    >
+                      <img
+                        src="images/job-dashboard/screenshot-2.png"
+                        alt="岗位信息分析示例 2"
+                      />
+                      <figcaption>岗位分析二</figcaption>
+                    </figure>
+                  </div>
+                </div>
+                <div class="tool-media-pane" data-pane="resume">
+                  <figure
+                    class="tool-media-figure tool-media-figure--zoomable"
+                    onclick="openLightbox(jobDashboardLightboxImages, 3)"
+                  >
+                    <img
+                      src="images/job-dashboard/resume-custom.png"
+                      alt="简历定制修改"
+                    />
+                    <figcaption>简历定制</figcaption>
+                  </figure>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -1579,6 +1694,25 @@
         {
           src: "images/agent.png",
           caption: "Workflow + Agent 混合架构",
+        },
+      ];
+
+      const jobDashboardLightboxImages = [
+        {
+          src: "images/job-dashboard/screenshot-0.png",
+          caption: "仪表盘总览",
+        },
+        {
+          src: "images/job-dashboard/screenshot-1.png",
+          caption: "岗位分析一",
+        },
+        {
+          src: "images/job-dashboard/screenshot-2.png",
+          caption: "岗位分析二",
+        },
+        {
+          src: "images/job-dashboard/resume-custom.png",
+          caption: "简历定制",
         },
       ];
 
